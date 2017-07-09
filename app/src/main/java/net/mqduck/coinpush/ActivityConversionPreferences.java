@@ -20,9 +20,11 @@
 package net.mqduck.coinpush;
 
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -46,24 +48,27 @@ public class ActivityConversionPreferences extends AppCompatActivity
         final EditText editTextDecreased = (EditText)findViewById(R.id.edit_text_decreased);
         final Button buttonRemove = (Button)findViewById(R.id.button_conversion_remove);
         final Button buttonSave = (Button)findViewById(R.id.button_conversion_save);
+        final CheckBox checkBoxIncreased = (CheckBox)findViewById(R.id.check_box_increased);
+        final CheckBox checkBoxDecreased = (CheckBox)findViewById(R.id.check_box_decreased);
         
         final Conversion conversion = ActivityMain
                 .conversions
                 .get(getIntent().getIntExtra(getString(R.string.key_intent_conversions_index), -1));
+        
+        boolean pushIncreasedEnabled, pushDecreasedEnabled;
+        pushIncreasedEnabled = getPrefBool(conversion, R.string.key_preference_push_enabled_increase);
+        pushDecreasedEnabled = getPrefBool(conversion, R.string.key_preference_push_enabled_decrease);
+        editTextIncreased.setEnabled(pushIncreasedEnabled);
+        checkBoxIncreased.setChecked(pushIncreasedEnabled);
+        editTextDecreased.setEnabled(pushDecreasedEnabled);
+        checkBoxDecreased.setChecked(pushDecreasedEnabled);
     
-        final String preferencesKeyIncrease = getString(R.string.key_preference_push_increase)
-                                              + conversion.currencyFrom.code.toString()
-                                              + ":"
-                                              + conversion.currencyTo.code.toString();
-        final String preferencesKeyDecrease = getString(R.string.key_preference_push_decrease)
-                                              + conversion.currencyFrom.code.toString()
-                                              + ":"
-                                              + conversion.currencyTo.code.toString();
-    
-        editTextIncreased.setText(String.format(Locale.getDefault(), "%f", ActivityMain.preferences
-                .getFloat(preferencesKeyIncrease, DEFAULT_THRESHOLD)));
-        editTextDecreased.setText(String.format(Locale.getDefault(), "%f", ActivityMain.preferences
-                .getFloat(preferencesKeyDecrease, DEFAULT_THRESHOLD)));
+        editTextIncreased.setText(getPrefFloatStr(conversion,
+                                                  R.string.key_preference_push_threshold_increase,
+                                                  DEFAULT_THRESHOLD));
+        editTextDecreased.setText(getPrefFloatStr(conversion,
+                                                  R.string.key_preference_push_threshold_decrease,
+                                                  DEFAULT_THRESHOLD));
         
         textConversion.setText(String.format(textConversion.getTag().toString(),
                                              conversion.currencyFrom.code,
@@ -76,23 +81,89 @@ public class ActivityConversionPreferences extends AppCompatActivity
                                                  conversion.currencyFrom.code));
         textNotifyDecrease.setText(String.format(textNotifyDecrease.getTag().toString(),
                                                  conversion.currencyFrom.code));
+    
+        checkBoxIncreased.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v)
+            {
+                editTextIncreased.setEnabled(checkBoxIncreased.isChecked());
+            }
+        });
+    
+        checkBoxDecreased.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v)
+            {
+                editTextDecreased.setEnabled(checkBoxDecreased.isChecked());
+            }
+        });
         
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v)
             {
-                ActivityMain.preferencesEditor.putFloat( preferencesKeyIncrease,
-                                                         Float.valueOf(editTextIncreased.getText().toString()) );
-                ActivityMain.preferencesEditor.putFloat( preferencesKeyDecrease,
-                                                         Float.valueOf(editTextDecreased.getText().toString()) );
+                setPrefFloat(conversion, R.string.key_preference_push_threshold_increase,
+                             editTextIncreased.getText().toString());
+                setPrefFloat(conversion, R.string.key_preference_push_threshold_decrease,
+                             editTextDecreased.getText().toString());
+                setPrefBool(conversion, R.string.key_preference_push_enabled_increase, checkBoxIncreased.isChecked());
+                setPrefBool(conversion, R.string.key_preference_push_enabled_decrease, checkBoxDecreased.isChecked());
                 ActivityMain.preferencesEditor.commit();
+                finish();
             }
         });
         
         buttonRemove.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v)
             {
-                
+                removePref(conversion, R.string.key_preference_push_threshold_increase);
+                removePref(conversion, R.string.key_preference_push_threshold_decrease);
+                removePref(conversion, R.string.key_preference_push_enabled_increase);
+                removePref(conversion, R.string.key_preference_push_enabled_decrease);
+                ActivityMain.conversions.remove(conversion);
+                ActivityMain.conversionAdapter.updateData();
+                ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
+                                                         ActivityMain.conversions.getConverionsString());
+                ActivityMain.preferencesEditor.commit();
+                finish();
             }
         });
+    }
+    
+    String getPrefKeyStr(final @StringRes int preferenceyKey, final Conversion conversion)
+    {
+        return getString(preferenceyKey) + conversion.getKeyString();
+    }
+    
+    void setPrefBool(final Conversion conversion, final @StringRes int preferenceKey, final boolean value)
+    {
+        ActivityMain.preferencesEditor.putInt(getPrefKeyStr(preferenceKey, conversion), value ? 1 : 0);
+    }
+    
+    boolean getPrefBool(final Conversion conversion, final @StringRes int preferenceKey, final boolean defValue)
+    {
+        int defIntValue = defValue ? 1 : 0;
+        if(ActivityMain.preferences.getInt(getPrefKeyStr(preferenceKey, conversion), defIntValue) == 0)
+            return false;
+        return true;
+    }
+    
+    boolean getPrefBool(final Conversion conversion, final @StringRes int preferenceKey)
+    {
+        return getPrefBool(conversion, preferenceKey, false);
+    }
+    
+    void setPrefFloat(final Conversion conversion, final @StringRes int preferenceKey, final String valueStr)
+    {
+        ActivityMain.preferencesEditor.putFloat(getPrefKeyStr(preferenceKey, conversion), Float.valueOf(valueStr));
+    }
+    
+    String getPrefFloatStr(final Conversion conversion, final @StringRes int preferenceKey, final float defValue)
+    {
+        return String.format(Locale.getDefault(), "%.2f",
+                             ActivityMain.preferences.getFloat(getPrefKeyStr(preferenceKey, conversion), defValue));
+        
+    }
+    
+    void removePref(final Conversion conversion, final @StringRes int preferenceKey)
+    {
+        ActivityMain.preferencesEditor.remove(getPrefKeyStr(preferenceKey, conversion));
     }
 }

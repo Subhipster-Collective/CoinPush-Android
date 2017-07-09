@@ -46,6 +46,12 @@ class Conversion
         currencyTo = Currency.currencies.get(codeTo);
     }
     
+    Conversion(final String codeStrFrom, final String codeStrTo)
+    {
+        currencyFrom = Currency.currencies.get(Currency.Code.valueOf(codeStrFrom));
+        currencyTo = Currency.currencies.get(Currency.Code.valueOf(codeStrTo));
+    }
+    
     void update()
     {
         try
@@ -63,4 +69,9 @@ class Conversion
     
     public double getValue() { return value; }
     public double getChange() { return change; }
+    
+    String getKeyString()
+    {
+        return currencyFrom.code.toString() + ":" + currencyTo.code.toString();
+    }
 }

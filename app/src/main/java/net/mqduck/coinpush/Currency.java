@@ -54,6 +54,7 @@ class Currency
     private final static String formatSymbol;
     
     final static HashMap<Code, Currency> currencies;
+    final static ArrayList<Currency> currencyListFrom, currencyListTo;
     
     static
     {
@@ -72,9 +73,27 @@ class Currency
         
         currencies.put(Code.USD, new Currency(Code.USD, "US Dollar", "$", "\uD83C\uDDFA\uD83C\uDDF8"));
         currencies.put(Code.EUR, new Currency(Code.EUR, "Euro", "€", "\uD83C\uDDEA\uD83C\uDDFA"));
-        currencies.put(Code.GBP, new Currency(Code.GBP, "British Pound", "£", "\uD83C\uDDEC\uD83C\uDDE7"));
         currencies.put(Code.JPY, new Currency(Code.JPY, "Japanese Yen", "¥", "\uD83C\uDDEF\uD83C\uDDF5"));
+        currencies.put(Code.GBP, new Currency(Code.GBP, "British Pound", "£", "\uD83C\uDDEC\uD83C\uDDE7"));
         currencies.put(Code.CNY, new Currency(Code.CNY, "Chinese Yuan", "¥", "\uD83C\uDDE8\uD83C\uDDF3"));
+        
+        currencyListFrom = new ArrayList<Currency>();
+        currencyListFrom.add(currencies.get(Code.BTC));
+        currencyListFrom.add(currencies.get(Code.ETH));
+        currencyListFrom.add(currencies.get(Code.LTC));
+        currencyListFrom.add(currencies.get(Code.DASH));
+        currencyListFrom.add(currencies.get(Code.XMR));
+        currencyListFrom.add(currencies.get(Code.NXT));
+        currencyListFrom.add(currencies.get(Code.ZEC));
+        currencyListFrom.add(currencies.get(Code.DGB));
+        currencyListFrom.add(currencies.get(Code.XRP));
+        
+        currencyListTo = new ArrayList<Currency>();
+        currencyListTo.add(currencies.get(Code.USD));
+        currencyListTo.add(currencies.get(Code.EUR));
+        currencyListTo.add(currencies.get(Code.GBP));
+        currencyListTo.add(currencies.get(Code.JPY));
+        currencyListTo.add(currencies.get(Code.CNY));
         
         format = NumberFormat.getCurrencyInstance();
         format.setCurrency(java.util.Currency.getInstance("EUR"));

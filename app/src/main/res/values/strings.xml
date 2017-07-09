@@ -3,6 +3,9 @@
     <string name="action_settings">Settings</string>
     <string name="key_intent_conversions_index">net.mqduck.coinpush.intent_conversion_index</string>
     <string name="key_preferences_main">net.mqduck.coinpush.preferences_main</string>
-    <string name="key_preference_push_increase">net.mqduck.coinpush.preference_push_increase</string>
-    <string name="key_preference_push_decrease">net.mqduck.coinpush.preference_push_decrease</string>
+    <string name="key_preference_push_threshold_increase">net.mqduck.coinpush.preference_push_threshold_increase</string>
+    <string name="key_preference_push_threshold_decrease">net.mqduck.coinpush.preference_push_threshold_decrease</string>
+    <string name="key_preference_push_enabled_increase">net.mqduck.coinpush.key_preference_push_enabled_increase</string>
+    <string name="key_preference_push_enabled_decrease">net.mqduck.coinpush.key_preference_push_enabled_decrease</string>
+    <string name="key_preference_conversions">net.mqduck.coinpush.preference_conversions</string>5
 </resources>

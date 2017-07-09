@@ -33,7 +33,7 @@ import android.widget.ListView;
 
 public class ActivityMain extends AppCompatActivity
 {
-    static ConversionList conversions = new ConversionList();
+    static ConversionList conversions;// = new ConversionList();
     static ConversionAdapter conversionAdapter;
     static float emojiSize;
     static SharedPreferences preferences;
@@ -50,15 +50,18 @@ public class ActivityMain extends AppCompatActivity
         preferencesEditor = preferences.edit();
         
         final Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        final ListView list = (ListView)findViewById(R.id.list);
         
         setSupportActionBar(toolbar);
     
-        conversions.add(new Conversion(Currency.Code.ETH, Currency.Code.USD));
+        /*conversions.add(new Conversion(Currency.Code.ETH, Currency.Code.USD));
         conversions.add(new Conversion(Currency.Code.BTC, Currency.Code.EUR));
         conversions.add(new Conversion(Currency.Code.LTC, Currency.Code.JPY));
         conversions.add(new Conversion(Currency.Code.NXT, Currency.Code.BTC));
-        conversions.add(new Conversion(Currency.Code.XMR, Currency.Code.CNY));
-        ListView list = (ListView)findViewById(R.id.list);
+        conversions.add(new Conversion(Currency.Code.XMR, Currency.Code.CNY));*/
+    
+        conversions = new ConversionList(preferences.getString(getString(R.string.key_preference_conversions), null));
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {

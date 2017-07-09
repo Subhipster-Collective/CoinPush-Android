@@ -41,7 +41,7 @@ class ConversionAdapter extends ArrayAdapter<Conversion>
     //private final Context context;
     private final ConversionList conversions;
     private LayoutInflater inflater;
-    private int updateDelay = 10000;
+    private int updateDelay = 30000;
     private final Runnable updateRunnable;
     private final Handler updateHandler;
     

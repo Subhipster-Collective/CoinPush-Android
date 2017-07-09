@@ -28,8 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-
 /**
  * Created by mqduck on 7/8/17.
  */
@@ -42,13 +40,15 @@ public class FragmentAddConversion extends DialogFragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_conversion, null);
-        
-        final CurrencyAdapter adapter = new CurrencyAdapter(getActivity(), new ArrayList<>(Currency.currencies.values()));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    
+        final CurrencyAdapter adapterFrom = new CurrencyAdapter(getActivity(), Currency.currencyListFrom);
+        final CurrencyAdapter adapterTo = new CurrencyAdapter(getActivity(), Currency.currencyListTo);
+        adapterFrom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterTo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         final Spinner spinnerFrom = (Spinner)view.findViewById(R.id.spinner_currency_from);
         final Spinner spinnerTo = (Spinner)view.findViewById(R.id.spinner_currency_to);
-        spinnerFrom.setAdapter(adapter);
-        spinnerTo.setAdapter(adapter);
+        spinnerFrom.setAdapter(adapterFrom);
+        spinnerTo.setAdapter(adapterTo);
         
         builder.setView(view)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -60,6 +60,9 @@ public class FragmentAddConversion extends DialogFragment
                                                                     (Currency)spinnerTo.getSelectedItem()));
                         //ActivityMain.conversionAdapter.notifyDataSetChanged();
                         ActivityMain.conversionAdapter.updateData();
+                        ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
+                                                                 ActivityMain.conversions.getConverionsString());
+                        ActivityMain.preferencesEditor.commit();
                     }
                 })
                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

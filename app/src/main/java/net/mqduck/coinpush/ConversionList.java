@@ -27,6 +27,35 @@ import java.util.ArrayList;
 
 class ConversionList extends ArrayList<Conversion>
 {
+    final static String DELIMITER_CONVERSION = ";";
+    final static String DELIMITER_CURRENCY = ":";
+    
+    ConversionList()
+    {
+        super();
+    }
+    
+    ConversionList(final String conversionsString)
+    {
+        if(conversionsString != null)
+            for(String conStr : conversionsString.split(DELIMITER_CONVERSION))
+            {
+                String[] currencyCodes = conStr.split(DELIMITER_CURRENCY);
+                add(new Conversion(currencyCodes[0], currencyCodes[1]));
+            }
+    }
+    
+    String getConverionsString()
+    {
+        String conversionString = "";
+        for(Conversion conversion : this)
+            conversionString += conversion.currencyFrom.code.toString()
+                                + DELIMITER_CURRENCY
+                                + conversion.currencyTo.code.toString()
+                                + DELIMITER_CONVERSION;
+        return conversionString;
+    }
+    
     public boolean add(Conversion conversion)
     {
         if(contains(conversion))

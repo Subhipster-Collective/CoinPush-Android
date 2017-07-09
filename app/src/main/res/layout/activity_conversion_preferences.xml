@@ -80,9 +80,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|start"
                     android:layout_weight="1"
-                    android:tag="\uD83D\uDCC8 When %s has decreased by "
+                    android:tag="When %s has increased by "
                     android:textAlignment="textStart"
-                    tools:text="\uD83D\uDCC8 When ETH has increased by "/>
+                    tools:text="When ETH has increased by "/>
 
                 <EditText
                     android:id="@+id/edit_text_increased"
@@ -91,6 +91,7 @@
                     android:layout_gravity="center_vertical|start"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:enabled="false"
                     android:inputType="numberDecimal"
                     android:text="10.00"/>
 
@@ -100,6 +101,13 @@
                     android:layout_gravity="center_vertical|start"
                     android:layout_weight="1"
                     android:text="%"/>
+
+                <CheckBox
+                    android:id="@+id/check_box_increased"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
             </LinearLayout>
 
             <LinearLayout
@@ -113,9 +121,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|start"
                     android:layout_weight="1"
-                    android:tag="\uD83D\uDCC9 When %s has increased by "
+                    android:tag="When %s has decreased by "
                     android:textAlignment="textStart"
-                    tools:text="\uD83D\uDCC8 When ETH has decreased by "/>
+                    tools:text="When ETH has decreased by "/>
 
                 <EditText
                     android:id="@+id/edit_text_decreased"
@@ -124,6 +132,7 @@
                     android:layout_gravity="center_vertical|start"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:enabled="false"
                     android:inputType="numberDecimal"
                     android:text="10.00"/>
 
@@ -134,33 +143,32 @@
                     android:layout_weight="1"
                     android:text="%"/>
 
+                <CheckBox
+                    android:id="@+id/check_box_decreased"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
+
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button_conversion_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"/>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.20"/>
+            android:layout_weight="0.25"/>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/button_conversion_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button_conversion_remove"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Remove"/>
-
-            <Button
-                android:id="@+id/button_conversion_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save"/>
-        </LinearLayout>
+            android:text="Remove"/>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
