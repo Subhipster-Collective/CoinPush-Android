@@ -19,7 +19,9 @@
 
 package net.mqduck.coinpush;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +36,8 @@ public class ActivityMain extends AppCompatActivity
     static ConversionList conversions = new ConversionList();
     static ConversionAdapter conversionAdapter;
     static float emojiSize;
+    static SharedPreferences preferences;
+    static SharedPreferences.Editor preferencesEditor;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,6 +46,8 @@ public class ActivityMain extends AppCompatActivity
         setContentView(R.layout.activity_main);
         
         emojiSize = (float)0.7 * getResources().getDrawable(R.mipmap.ic_eth).getIntrinsicHeight();
+        preferences = getSharedPreferences(getString(R.string.key_preferences_main), Context.MODE_PRIVATE);
+        preferencesEditor = preferences.edit();
         
         final Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         
@@ -58,8 +64,7 @@ public class ActivityMain extends AppCompatActivity
             {
                 Conversion conversion = conversions.get(position);
                 Intent intent = new Intent(parent.getContext(), ActivityConversionPreferences.class);
-                intent.putExtra(getString(R.string.key_intent_currency_from), conversion.currencyFrom.code.toString());
-                intent.putExtra(getString(R.string.key_intent_currency_to), conversion.currencyTo.code.toString());
+                intent.putExtra(getString(R.string.key_intent_conversions_index), position);
                 startActivity(intent);
             }
         });
