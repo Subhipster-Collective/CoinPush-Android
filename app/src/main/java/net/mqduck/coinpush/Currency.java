@@ -43,7 +43,7 @@ class Currency
     enum Code
     {
         ETH("ETH"), BTC("BTC"), LTC("LTC"), DASH("DASH"), XMR("XMR"), NXT("NXT"), ZEC("ZEC"), DGB("DGB"), XRP("XRP"),
-        USD("USD"), EUR("EUR"), GBP("GBP"), JPY("JPY"), CNY("CNY");
+        USD("USD"), EUR("EUR"), GBP("GBP"), JPY("JPY"), CNY("CNY"), AUD("AUD"), CAD("CAD"), CHF("CHF"), ;
         private final String code;
         Code(String code) { this.code = code; }
         public String toString() { return code; }
@@ -74,10 +74,13 @@ class Currency
         currencies.put(Code.USD, new Currency(Code.USD, "US Dollar", "$", "\uD83C\uDDFA\uD83C\uDDF8"));
         currencies.put(Code.EUR, new Currency(Code.EUR, "Euro", "€", "\uD83C\uDDEA\uD83C\uDDFA"));
         currencies.put(Code.JPY, new Currency(Code.JPY, "Japanese Yen", "¥", "\uD83C\uDDEF\uD83C\uDDF5"));
-        currencies.put(Code.GBP, new Currency(Code.GBP, "British Pound", "£", "\uD83C\uDDEC\uD83C\uDDE7"));
+        currencies.put(Code.GBP, new Currency(Code.GBP, "Pound Sterling", "£", "\uD83C\uDDEC\uD83C\uDDE7"));
         currencies.put(Code.CNY, new Currency(Code.CNY, "Chinese Yuan", "¥", "\uD83C\uDDE8\uD83C\uDDF3"));
+        currencies.put(Code.AUD, new Currency(Code.AUD, "Australian Dollar", "$", "\uD83C\uDDE6\uD83C\uDDFA"));
+        currencies.put(Code.CAD, new Currency(Code.CAD, "Canadian Dollar", "$", "\uD83C\uDDE8\uD83C\uDDE6"));
+        currencies.put(Code.CHF, new Currency(Code.CHF, "Swiss Franc", "Fr", "\uD83C\uDDE8\uD83C\uDDED"));
         
-        currencyListFrom = new ArrayList<Currency>();
+        currencyListFrom = new ArrayList<>();
         currencyListFrom.add(currencies.get(Code.BTC));
         currencyListFrom.add(currencies.get(Code.ETH));
         currencyListFrom.add(currencies.get(Code.LTC));
@@ -90,10 +93,14 @@ class Currency
         
         currencyListTo = new ArrayList<Currency>();
         currencyListTo.add(currencies.get(Code.USD));
-        currencyListTo.add(currencies.get(Code.EUR));
-        currencyListTo.add(currencies.get(Code.GBP));
-        currencyListTo.add(currencies.get(Code.JPY));
         currencyListTo.add(currencies.get(Code.CNY));
+        currencyListTo.add(currencies.get(Code.EUR));
+        currencyListTo.add(currencies.get(Code.JPY));
+        currencyListTo.add(currencies.get(Code.GBP));
+        currencyListTo.add(currencies.get(Code.AUD));
+        currencyListTo.add(currencies.get(Code.CAD));
+        currencyListTo.add(currencies.get(Code.CHF));
+        currencyListTo.addAll(currencyListFrom);
         
         format = NumberFormat.getCurrencyInstance();
         format.setCurrency(java.util.Currency.getInstance("EUR"));
@@ -220,7 +227,7 @@ class Currency
     {
         String valueStr = format.format(value);
         
-        if(symbol.equals("$"))
+        if(symbol.equals(Code.USD.toString()))
             valueStr = valueStr.replaceFirst(formatSymbol, "\\$");
         else
             valueStr = valueStr.replaceFirst(formatSymbol, symbol);

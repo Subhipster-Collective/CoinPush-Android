@@ -56,6 +56,8 @@ class Conversion
     {
         try
         {
+            if(currencyTo.json == null)
+                return;
             JSONObject json = currencyTo.json.getJSONObject(currencyFrom.code.toString())
                                              .getJSONObject(currencyTo.code.toString());
             value = json.getDouble(DATUM_VALUE);
