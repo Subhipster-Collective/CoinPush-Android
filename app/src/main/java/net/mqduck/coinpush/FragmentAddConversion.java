@@ -62,7 +62,7 @@ public class FragmentAddConversion extends DialogFragment
                         ActivityMain.conversions.add(new Conversion((Currency)spinnerFrom.getSelectedItem(),
                                                                     (Currency)spinnerTo.getSelectedItem()));
                         ActivityMain.conversionAdapter.notifyDataSetChanged();
-                        ActivityMain.conversionAdapter.updateData();
+                        ActivityMain.updateData();
                         ActivityMain.preferencesEditor
                                 .putString(getString(R.string.key_preference_conversions),
                                            ActivityMain.conversions.getConverionsString());

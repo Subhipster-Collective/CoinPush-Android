@@ -22,7 +22,9 @@ package net.mqduck.coinpush;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -33,11 +35,15 @@ import android.widget.ListView;
 
 public class ActivityMain extends AppCompatActivity
 {
+    final private static int updateDelay = 10000;
+    
     static ConversionList conversions;// = new ConversionList();
     static ConversionAdapter conversionAdapter;
     static float emojiSize;
     static SharedPreferences preferences;
     static SharedPreferences.Editor preferencesEditor;
+    static Runnable updateRunnable;
+    static Handler updateHandler;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,6 +73,16 @@ public class ActivityMain extends AppCompatActivity
         });
         conversionAdapter = new ConversionAdapter(this, conversions);
         list.setAdapter(conversionAdapter);
+    
+        updateRunnable = new Runnable() {
+            @Override public void run()
+            {
+                updateData();
+                updateHandler.postDelayed(this, updateDelay);
+            }
+        };
+        updateHandler = new Handler();
+        updateHandler.postDelayed(updateRunnable, 0);
         
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
@@ -114,5 +130,19 @@ public class ActivityMain extends AppCompatActivity
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+    
+    static void updateData()
+    {
+        new AsyncTask<Void, Void, Void>() {
+            @Override protected Void doInBackground(Void... params)
+            {
+                Currency.updateJsons();
+                for(Conversion conversion : conversions)
+                    conversion.update();
+                return null;
+            }
+            @Override protected void onPostExecute(Void result) { conversionAdapter.notifyDataSetChanged(); }
+        }.execute();
     }
 }

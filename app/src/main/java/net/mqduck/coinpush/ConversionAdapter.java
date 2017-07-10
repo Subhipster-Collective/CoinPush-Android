@@ -21,8 +21,6 @@ package net.mqduck.coinpush;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -41,9 +39,6 @@ class ConversionAdapter extends ArrayAdapter<Conversion>
     //private final Context context;
     private final ConversionList conversions;
     private LayoutInflater inflater;
-    private int updateDelay = 30000;
-    private final Runnable updateRunnable;
-    private final Handler updateHandler;
     
     ConversionAdapter(final Context context, final ConversionList conversions)
     {
@@ -51,30 +46,6 @@ class ConversionAdapter extends ArrayAdapter<Conversion>
         //this.context = context;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.conversions = conversions;
-        
-        updateRunnable = new Runnable() {
-            @Override public void run()
-            {
-                updateData();
-                updateHandler.postDelayed(this, updateDelay);
-            }
-        };
-        updateHandler = new Handler();
-        updateHandler.postDelayed(updateRunnable, 0);
-    }
-    
-    void updateData()
-    {
-        new AsyncTask<Void, Void, Void>() {
-            @Override protected Void doInBackground(Void... params)
-            {
-                Currency.updateJsons();
-                for(Conversion conversion : conversions)
-                    conversion.update();
-                return null;
-            }
-            @Override protected void onPostExecute(Void result) { notifyDataSetChanged(); }
-        }.execute();
     }
     
     @NonNull
