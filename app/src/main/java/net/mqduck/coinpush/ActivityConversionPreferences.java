@@ -118,7 +118,7 @@ public class ActivityConversionPreferences extends AppCompatActivity
                 removePref(conversion, R.string.key_preference_push_enabled_increase);
                 removePref(conversion, R.string.key_preference_push_enabled_decrease);
                 ActivityMain.conversions.remove(conversion);
-                ActivityMain.conversionAdapter.updateData();
+                ActivityMain.conversionAdapter.notifyDataSetChanged();
                 ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
                                                          ActivityMain.conversions.getConverionsString());
                 ActivityMain.preferencesEditor.commit();
@@ -139,8 +139,7 @@ public class ActivityConversionPreferences extends AppCompatActivity
     
     boolean getPrefBool(final Conversion conversion, final @StringRes int preferenceKey, final boolean defValue)
     {
-        int defIntValue = defValue ? 1 : 0;
-        if(ActivityMain.preferences.getInt(getPrefKeyStr(preferenceKey, conversion), defIntValue) == 0)
+        if(ActivityMain.preferences.getInt(getPrefKeyStr(preferenceKey, conversion), defValue ? 1 : 0) == 0)
             return false;
         return true;
     }

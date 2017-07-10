@@ -54,12 +54,6 @@ public class ActivityMain extends AppCompatActivity
         
         setSupportActionBar(toolbar);
     
-        /*conversions.add(new Conversion(Currency.Code.ETH, Currency.Code.USD));
-        conversions.add(new Conversion(Currency.Code.BTC, Currency.Code.EUR));
-        conversions.add(new Conversion(Currency.Code.LTC, Currency.Code.JPY));
-        conversions.add(new Conversion(Currency.Code.NXT, Currency.Code.BTC));
-        conversions.add(new Conversion(Currency.Code.XMR, Currency.Code.CNY));*/
-    
         conversions = new ConversionList(preferences.getString(getString(R.string.key_preference_conversions), null));
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

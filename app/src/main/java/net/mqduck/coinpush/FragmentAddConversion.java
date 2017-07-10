@@ -43,25 +43,35 @@ public class FragmentAddConversion extends DialogFragment
     
         final CurrencyAdapter adapterFrom = new CurrencyAdapter(getActivity(), Currency.currencyListFrom);
         final CurrencyAdapter adapterTo = new CurrencyAdapter(getActivity(), Currency.currencyListTo);
-        adapterFrom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterTo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         final Spinner spinnerFrom = (Spinner)view.findViewById(R.id.spinner_currency_from);
         final Spinner spinnerTo = (Spinner)view.findViewById(R.id.spinner_currency_to);
+        
+        adapterFrom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterTo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFrom.setAdapter(adapterFrom);
         spinnerTo.setAdapter(adapterTo);
+        spinnerFrom.setSelection(ActivityMain.preferences
+                                         .getInt(getString(R.string.key_preference_add_conversion_default_from), 0));
+        spinnerTo.setSelection(ActivityMain.preferences
+                                       .getInt(getString(R.string.key_preference_add_conversion_default_to), 0));
         
         builder.setView(view)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which)
                     {
-                        Currency currencyFrom = (Currency)spinnerFrom.getSelectedItem();
-                        Currency currencyTo = (Currency)spinnerFrom.getSelectedItem();
                         ActivityMain.conversions.add(new Conversion((Currency)spinnerFrom.getSelectedItem(),
                                                                     (Currency)spinnerTo.getSelectedItem()));
-                        //ActivityMain.conversionAdapter.notifyDataSetChanged();
+                        ActivityMain.conversionAdapter.notifyDataSetChanged();
                         ActivityMain.conversionAdapter.updateData();
-                        ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
-                                                                 ActivityMain.conversions.getConverionsString());
+                        ActivityMain.preferencesEditor
+                                .putString(getString(R.string.key_preference_conversions),
+                                           ActivityMain.conversions.getConverionsString());
+                        ActivityMain.preferencesEditor
+                                .putInt(getString(R.string.key_preference_add_conversion_default_from),
+                                        spinnerFrom.getSelectedItemPosition());
+                        ActivityMain.preferencesEditor
+                                .putInt(getString(R.string.key_preference_add_conversion_default_to),
+                                        spinnerTo.getSelectedItemPosition());
                         ActivityMain.preferencesEditor.commit();
                     }
                 })

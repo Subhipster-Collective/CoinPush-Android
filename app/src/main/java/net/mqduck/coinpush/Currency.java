@@ -220,7 +220,7 @@ class Currency
     {
         String valueStr = format.format(value);
         
-        if(code == Code.USD)
+        if(symbol.equals("$"))
             valueStr = valueStr.replaceFirst(formatSymbol, "\\$");
         else
             valueStr = valueStr.replaceFirst(formatSymbol, symbol);
