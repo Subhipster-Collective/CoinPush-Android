@@ -37,7 +37,7 @@ class ConversionList extends ArrayList<Conversion>
     
     ConversionList(final String conversionsString)
     {
-        if(conversionsString != null)
+        if(conversionsString != null && !conversionsString.isEmpty())
             for(String conStr : conversionsString.split(DELIMITER_CONVERSION))
             {
                 String[] currencyCodes = conStr.split(DELIMITER_CURRENCY);
