@@ -36,7 +36,7 @@ import android.widget.TextView;
 
 class ConversionAdapter extends ArrayAdapter<Conversion>
 {
-    private final static double COLOR_SCALE = 17.0;
+    private final static double COLOR_SCALE = 255.0 / 20.0;
     
     //private final Context context;
     private final ConversionList conversions;

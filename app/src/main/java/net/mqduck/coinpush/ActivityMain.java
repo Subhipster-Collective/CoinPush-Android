@@ -35,7 +35,7 @@ import android.widget.ListView;
 
 public class ActivityMain extends AppCompatActivity
 {
-    final private static int updateDelay = 10000;
+    final private static int updateDelay = 15000;
     
     static ConversionList conversions;// = new ConversionList();
     static ConversionAdapter conversionAdapter;
@@ -77,12 +77,12 @@ public class ActivityMain extends AppCompatActivity
         updateRunnable = new Runnable() {
             @Override public void run()
             {
-                updateData();
+                updateDataThread();
                 updateHandler.postDelayed(this, updateDelay);
             }
         };
         updateHandler = new Handler();
-        updateHandler.postDelayed(updateRunnable, 0);
+        updateHandler.post(updateRunnable);
         
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
@@ -122,17 +122,20 @@ public class ActivityMain extends AppCompatActivity
         
         switch(item.getItemId())
         {
-        case R.id.action_settings:
-            return true;
         case R.id.action_add_currency:
             new FragmentAddConversion().show(getFragmentManager(), "FOO");
+            return true;
+        case R.id.action_refresh:
+            updateData();
+            return true;
+        case R.id.action_settings:
             return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
     
-    static void updateData()
+    private static void updateDataThread()
     {
         new AsyncTask<Void, Void, Void>() {
             @Override protected Void doInBackground(Void... params)
@@ -144,5 +147,11 @@ public class ActivityMain extends AppCompatActivity
             }
             @Override protected void onPostExecute(Void result) { conversionAdapter.notifyDataSetChanged(); }
         }.execute();
+    }
+    
+    static void updateData()
+    {
+        updateHandler.removeCallbacks(updateRunnable);
+        updateHandler.post(updateRunnable);
     }
 }
