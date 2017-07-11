@@ -1,20 +1,20 @@
 /*
  * Copyright 2017 Jeffrey Thomas Piercy
  *
- * This file is part of CoinPush.
+ * This file is part of CoinPush-Android.
  *
- * CoinPush is free software: you can redistribute it and/or modify
+ * CoinPush-Android is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CoinPush is distributed in the hope that it will be useful,
+ * CoinPush-Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with CoinPush.  If not, see <http://www.gnu.org/licenses/>.
+ * along with CoinPush-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package net.mqduck.coinpush;
@@ -30,7 +30,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-public class ActivityConversionPreferences extends AppCompatActivity
+public class ActivityPreferencesConversion extends AppCompatActivity
 {
     private final static float DEFAULT_THRESHOLD = 10.0f;
     
