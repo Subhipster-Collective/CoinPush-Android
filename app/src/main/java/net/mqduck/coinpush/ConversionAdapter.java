@@ -36,6 +36,8 @@ import android.widget.TextView;
 
 class ConversionAdapter extends ArrayAdapter<Conversion>
 {
+    private final static double COLOR_SCALE = 17.0;
+    
     //private final Context context;
     private final ConversionList conversions;
     private LayoutInflater inflater;
@@ -68,9 +70,15 @@ class ConversionAdapter extends ArrayAdapter<Conversion>
         double change = conversion.getChange();
         textChange.setText(String.format(textChange.getTag().toString(), change));
         if(change < 0)
-            textChange.setTextColor(Color.rgb((int)Math.round(change * -30), 0, 0));
+        {
+            int red = (int)Math.round(-change * COLOR_SCALE);
+            textChange.setTextColor(Color.rgb(red > 255 ? 255 : red, 0, 0));
+        }
         else
-            textChange.setTextColor(Color.rgb(0, (int)Math.round(change * 30), 0));
+        {
+            int green = (int)Math.round(change * COLOR_SCALE);
+            textChange.setTextColor(Color.rgb(0, green > 255 ? 255 : green, 0));
+        }
         
         return conversionView;
     }

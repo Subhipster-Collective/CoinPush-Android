@@ -49,8 +49,10 @@ class Currency
         public String toString() { return code; }
     }
     
+    private final static String STRING_REPLACE_SHOULD_HAVE_A_NON_REGEX_VERSION = "$";
+    
     private final static String BASE_URL = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=%s&tsyms=%s";
-    private final static NumberFormat format;
+    private final static NumberFormat valueFormat;
     private final static String formatSymbol;
     
     final static HashMap<Code, Currency> currencies;
@@ -102,10 +104,10 @@ class Currency
         currencyListTo.add(currencies.get(Code.CHF));
         currencyListTo.addAll(currencyListFrom);
         
-        format = NumberFormat.getCurrencyInstance();
-        format.setCurrency(java.util.Currency.getInstance("EUR"));
-        format.setMaximumFractionDigits(16);
-        formatSymbol = format.getCurrency().getSymbol();
+        valueFormat = NumberFormat.getCurrencyInstance();
+        valueFormat.setCurrency(java.util.Currency.getInstance("EUR"));
+        valueFormat.setMaximumFractionDigits(16);
+        formatSymbol = valueFormat.getCurrency().getSymbol();
     }
     
     final Code code;
@@ -225,9 +227,9 @@ class Currency
     
     String getValueStr(final double value, final boolean includeCode)
     {
-        String valueStr = format.format(value);
+        String valueStr = valueFormat.format(value);
         
-        if(symbol.equals(Code.USD.toString()))
+        if(symbol.equals(STRING_REPLACE_SHOULD_HAVE_A_NON_REGEX_VERSION))
             valueStr = valueStr.replaceFirst(formatSymbol, "\\$");
         else
             valueStr = valueStr.replaceFirst(formatSymbol, symbol);
