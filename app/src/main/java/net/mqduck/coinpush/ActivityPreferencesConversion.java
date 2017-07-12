@@ -33,6 +33,23 @@ import java.util.Locale;
 public class ActivityPreferencesConversion extends AppCompatActivity
 {
     private final static float DEFAULT_THRESHOLD = 10.0f;
+    private final static String FORMATE_STR_INCREASE_BASE = "When %s has increased by";
+    private final static String FORMATE_STR_DECREASE_BASE = "When %s has decreased by";
+    private final static String formatStrIncrease, formatStrDecrease;
+    
+    static
+    {
+        if(android.os.Build.VERSION.SDK_INT > 22)
+        {
+            formatStrIncrease = "\uD83D\uDCC8 " + FORMATE_STR_INCREASE_BASE;
+            formatStrDecrease = "\uD83D\uDCC9 " + FORMATE_STR_DECREASE_BASE;
+        }
+        else
+        {
+            formatStrIncrease = FORMATE_STR_INCREASE_BASE;
+            formatStrDecrease = FORMATE_STR_DECREASE_BASE;
+        }
+    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,14 +90,12 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         textConversion.setText(String.format(textConversion.getTag().toString(),
                                              conversion.currencyFrom.code,
                                              conversion.currencyTo.code));
-        textConversionValue.setText(String.format(textConversionValue.getTag().toString(),
+        textConversionValue.setText( String.format(textConversionValue.getTag().toString(),
                                              conversion.currencyFrom.symbol,
                                              conversion.currencyTo.symbol,
-                                             conversion.getValue()));
-        textNotifyIncrease.setText(String.format(textNotifyIncrease.getTag().toString(),
-                                                 conversion.currencyFrom.code));
-        textNotifyDecrease.setText(String.format(textNotifyDecrease.getTag().toString(),
-                                                 conversion.currencyFrom.code));
+                                             conversion.getValue()) );
+        textNotifyIncrease.setText(String.format(formatStrIncrease, conversion.currencyFrom.code));
+        textNotifyDecrease.setText(String.format(formatStrDecrease, conversion.currencyFrom.code));
     
         checkBoxIncreased.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v)

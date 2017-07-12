@@ -25,5 +25,5 @@
         android:entries="@array/refresh_delay_titles"
         android:entryValues="@array/refresh_delay_values"
         android:key="@string/key_preference_refresh_delay"
-        android:title="Refresh every"/>
+        android:title="Refresh every x time units"/>
 </PreferenceScreen>

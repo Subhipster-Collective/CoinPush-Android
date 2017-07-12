@@ -91,7 +91,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|start"
                         android:layout_weight="1"
-                        android:tag="When %s has increased by"
                         android:textAlignment="textStart"
                         tools:text="When ETH has increased by"/>
 
@@ -133,7 +132,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|start"
                         android:layout_weight="1"
-                        android:tag="When %s has decreased by"
                         android:textAlignment="textStart"
                         tools:text="When ETH has decreased by"/>
 
