@@ -43,6 +43,7 @@ class Currency
     enum Code
     {
         ETH("ETH"), BTC("BTC"), LTC("LTC"), DASH("DASH"), XMR("XMR"), NXT("NXT"), ZEC("ZEC"), DGB("DGB"), XRP("XRP"),
+        ETC("ETC"),
         USD("USD"), EUR("EUR"), GBP("GBP"), JPY("JPY"), CNY("CNY"), AUD("AUD"), CAD("CAD"), CHF("CHF"), ;
         private final String code;
         Code(String code) { this.code = code; }
@@ -61,7 +62,7 @@ class Currency
     static
     {
         currencies = new HashMap<>();
-        currencies.put(Code.ETH, new Currency(Code.ETH, "Etherium", "Ξ", R.mipmap.ic_eth));
+        currencies.put(Code.ETH, new Currency(Code.ETH, "Ethereum", "Ξ", R.mipmap.ic_eth));
         currencies.put(Code.BTC, new Currency(Code.BTC, "Bitcoin",
                                               android.os.Build.VERSION.SDK_INT < 26 ? "Ƀ" : "\u20BF",
                                               R.mipmap.ic_btc));
@@ -72,6 +73,7 @@ class Currency
         currencies.put(Code.ZEC, new Currency(Code.ZEC, "ZCash", "ZEC", R.mipmap.ic_zec));
         currencies.put(Code.DGB, new Currency(Code.DGB, "DigiByte", "", R.mipmap.ic_dgb));
         currencies.put(Code.XRP, new Currency(Code.XRP, "Ripple", "", R.mipmap.ic_xrp));
+        currencies.put(Code.ETC, new Currency(Code.ETC, "Ethereum Classic", "", R.mipmap.ic_etc));
         
         currencies.put(Code.USD, new Currency(Code.USD, "US Dollar", "$", "\uD83C\uDDFA\uD83C\uDDF8"));
         currencies.put(Code.EUR, new Currency(Code.EUR, "Euro", "€", "\uD83C\uDDEA\uD83C\uDDFA"));
@@ -92,6 +94,7 @@ class Currency
         currencyListFrom.add(currencies.get(Code.ZEC));
         currencyListFrom.add(currencies.get(Code.DGB));
         currencyListFrom.add(currencies.get(Code.XRP));
+        currencyListFrom.add(currencies.get(Code.ETC));
         
         currencyListTo = new ArrayList<Currency>();
         currencyListTo.add(currencies.get(Code.USD));

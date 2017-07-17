@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<!--
+  ~ Copyright 2017 Jeffrey Thomas Piercy
+  ~
+  ~ This file is part of CoinPush-Android.
+  ~
+  ~ CoinPush-Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ CoinPush-Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with CoinPush-Android.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +31,24 @@
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
-        android:layout_height="495dp"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/ad_frame_main"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp"/>
-</android.support.constraint.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/ad_frame_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <!--<com.google.android.gms.ads.AdView
+            android:id="@+id/advertisement_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-9926113995373020/3674436196"/>-->
+    </FrameLayout>
+
+</RelativeLayout>

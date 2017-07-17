@@ -32,10 +32,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 public class ActivityMain extends AppCompatActivity
 {
+    private final static String APP_ID = "ca-app-pub-9926113995373020~9860570594";
+    private final static String AD_UNIT_ID_MAIN = "ca-app-pub-9926113995373020/3674436196";
+    
     private static int updateDelay;
     
     static ConversionList conversions;// = new ConversionList();
@@ -45,6 +54,8 @@ public class ActivityMain extends AppCompatActivity
     static SharedPreferences.Editor preferencesEditor;
     static Runnable updateRunnable;
     static Handler updateHandler;
+    static AdView adViewMain;
+    static boolean mobileAdsUninitialized = true;
     
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -54,15 +65,19 @@ public class ActivityMain extends AppCompatActivity
         setContentView(R.layout.activity_main);
         
         emojiSize = (float)0.7 * getResources().getDrawable(R.mipmap.ic_eth).getIntrinsicHeight();
-        //preferences = getSharedPreferences(getString(R.string.key_preferences_main), Context.MODE_PRIVATE);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferencesEditor = preferences.edit();
         
         final Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         final ListView list = (ListView)findViewById(R.id.list);
+        final FrameLayout adFrameMain = (FrameLayout)findViewById(R.id.ad_frame_main);
         
         setSupportActionBar(toolbar);
     
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferencesEditor = preferences.edit();
+        
+        if(preferences.getBoolean(getString(R.string.key_preference_ads), false))
+            enableAds();
+        
         conversions = new ConversionList(preferences.getString(getString(R.string.key_preference_conversions), null));
         updateDelay = Integer.valueOf(preferences.getString(getString(R.string.key_preference_refresh_delay),
                                                             getString(R.string.refresh_delay_default)));
@@ -134,10 +149,31 @@ public class ActivityMain extends AppCompatActivity
             updateData();
             return true;
         case R.id.action_settings:
-            startActivity(new Intent(this, ActivityPreferencesGlobal.class));
+            //startActivity(new Intent(this, ActivityPreferencesGlobal.class));
+            startActivityForResult(new Intent(this, ActivityPreferencesGlobal.class), getResources().getInteger(R.integer.request_preferences_global));
             return true;
         default:
             return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(requestCode == getResources().getInteger(R.integer.request_preferences_global))
+        {
+            String keyDelay = getString(R.string.key_preference_refresh_delay);
+            String keyAds = getString(R.string.key_preference_ads);
+            
+            if(data.hasExtra(keyDelay))
+                setUpdateDelay(data.getIntExtra(keyDelay, -1));
+            if(data.hasExtra(keyAds))
+            {
+                if(data.getBooleanExtra(keyAds, false))
+                    enableAds();
+                else
+                    disableAds();
+            }
         }
     }
     
@@ -166,5 +202,27 @@ public class ActivityMain extends AppCompatActivity
         ActivityMain.updateDelay = updateDelay;
         updateHandler.removeCallbacks(updateRunnable);
         updateHandler.postDelayed(updateRunnable, updateDelay);
+    }
+    
+    void enableAds()
+    {
+        if(mobileAdsUninitialized)
+        {
+            MobileAds.initialize(this, APP_ID);
+            mobileAdsUninitialized = false;
+        }
+        adViewMain = new AdView(this);
+        adViewMain.setAdSize(AdSize.SMART_BANNER);
+        adViewMain.setAdUnitId(AD_UNIT_ID_MAIN);
+        adViewMain.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                                                                FrameLayout.LayoutParams.WRAP_CONTENT));
+        ((FrameLayout)findViewById(R.id.ad_frame_main)).addView(adViewMain);
+        adViewMain.loadAd(new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC").build());
+    }
+    
+    void disableAds()
+    {
+        ((FrameLayout)findViewById(R.id.ad_frame_main)).removeView(adViewMain);
+        adViewMain = null;
     }
 }

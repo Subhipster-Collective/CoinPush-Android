@@ -36,6 +36,7 @@ public class ActivityPreferencesGlobal extends AppCompatPreferenceActivity
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         setPreferenceRefreshTitle(getString(R.string.key_preference_refresh_delay));
+        setResult(getResources().getInteger(R.integer.request_preferences_global), getIntent());
     }
     
     @Override
@@ -44,8 +45,10 @@ public class ActivityPreferencesGlobal extends AppCompatPreferenceActivity
         if( key.equals(getString(R.string.key_preference_refresh_delay)) )
         {
             setPreferenceRefreshTitle(key);
-            ActivityMain.setUpdateDelay(Integer.valueOf(ActivityMain.preferences.getString(key, "")));
+            getIntent().putExtra( key, Integer.valueOf(sharedPreferences.getString(key, "")) );
         }
+        else if( key.equals(getString(R.string.key_preference_ads)) )
+            getIntent().putExtra(key, sharedPreferences.getBoolean(key, false));
     }
     
     @Override

@@ -30,4 +30,5 @@
     <string name="key_preference_add_conversion_default_from">net.mqduck.coinpush.preference_add_conversion_default_from</string>
     <string name="key_preference_add_conversion_default_to">net.mqduck.coinpush.preference_add_conversion_default_to</string>
     <string name="key_preference_refresh_delay">net.mqduck.coinpush.preference_refresh_delay</string>
+    <string name="key_preference_ads">net.mqduck.coinpush.preference_ads</string>
 </resources>
