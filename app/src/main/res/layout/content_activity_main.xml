@@ -42,13 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true">
-
-        <!--<com.google.android.gms.ads.AdView
-            android:id="@+id/advertisement_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-9926113995373020/3674436196"/>-->
     </FrameLayout>
 
 </RelativeLayout>
