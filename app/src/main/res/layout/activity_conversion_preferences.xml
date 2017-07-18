@@ -18,169 +18,185 @@
   ~ along with CoinPush-Android.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.mqduck.coinpush.ActivityPreferencesConversion">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_above="@+id/ad_frame_preferences_conversion"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:weightSum="1"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
-
-            <TextView
-                android:id="@+id/text_preferences_conversion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:tag="%s to %s"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                tools:text="ETH to USD"/>
-
-            <TextView
-                android:id="@+id/text_preferences_conversion_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:tag="%s1 = %s%.3f"
-                android:textAlignment="center"
-                android:textSize="30sp"
-                tools:text="Ξ1 = $100.000"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.15"/>
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Push Notifications"
-                android:textAlignment="center"/>
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:weightSum="1"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="8dp">
+
+                <TextView
+                    android:id="@+id/text_preferences_conversion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:tag="%s to %s"
+                    android:textAlignment="center"
+                    android:textSize="30sp"
+                    tools:text="ETH to USD"/>
+
+                <TextView
+                    android:id="@+id/text_preferences_conversion_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:tag="%s1 = %s%.3f"
+                    android:textAlignment="center"
+                    android:textSize="30sp"
+                    tools:text="Ξ1 = $100.000"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"/>
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Push Notifications"
+                    android:textAlignment="center"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/text_notify_increase"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_weight="1"
-                        android:textAlignment="textStart"
-                        tools:text="When ETH has increased by"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/edit_text_increased"
-                        android:layout_width="55sp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:inputType="numberDecimal"
-                        android:text="10.00"/>
+                        <TextView
+                            android:id="@+id/text_notify_increase"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_weight="1"
+                            android:textAlignment="textStart"
+                            tools:text="When ETH has increased by"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="%"/>
+                        <EditText
+                            android:id="@+id/edit_text_increased"
+                            android:layout_width="55sp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:enabled="false"
+                            android:inputType="numberDecimal"
+                            android:text="10.00"/>
 
-                    <CheckBox
-                        android:id="@+id/check_box_increased"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="%"/>
+
+                        <CheckBox
+                            android:id="@+id/check_box_increased"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/text_notify_decrease"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_weight="1"
+                            android:textAlignment="textStart"
+                            tools:text="When ETH has decreased by"/>
+
+                        <EditText
+                            android:id="@+id/edit_text_decreased"
+                            android:layout_width="55sp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:enabled="false"
+                            android:inputType="numberDecimal"
+                            android:text="10.00"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="%"/>
+
+                        <CheckBox
+                            android:id="@+id/check_box_decreased"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_conversion_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save"/>
 
-                    <TextView
-                        android:id="@+id/text_notify_decrease"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_weight="1"
-                        android:textAlignment="textStart"
-                        tools:text="When ETH has decreased by"/>
-
-                    <EditText
-                        android:id="@+id/edit_text_decreased"
-                        android:layout_width="55sp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:inputType="numberDecimal"
-                        android:text="10.00"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|start"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="%"/>
-
-                    <CheckBox
-                        android:id="@+id/check_box_decreased"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"/>
-
-                </LinearLayout>
             </LinearLayout>
 
             <Button
-                android:id="@+id/button_conversion_save"
+                android:id="@+id/button_conversion_remove"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"/>
+                android:layout_gravity="center_horizontal"
+                android:text="Remove"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp"/>
 
         </LinearLayout>
+    </FrameLayout>
 
-        <Button
-            android:id="@+id/button_conversion_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Remove"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp"/>
+    <FrameLayout
+        android:id="@+id/ad_frame_preferences_conversion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+    </FrameLayout>
 
-    </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

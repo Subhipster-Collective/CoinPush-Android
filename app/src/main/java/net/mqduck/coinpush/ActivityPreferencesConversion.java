@@ -23,9 +23,11 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -33,21 +35,21 @@ import java.util.Locale;
 public class ActivityPreferencesConversion extends AppCompatActivity
 {
     private final static float DEFAULT_THRESHOLD = 10.0f;
-    private final static String FORMATE_STR_INCREASE_BASE = "When %s has increased by";
-    private final static String FORMATE_STR_DECREASE_BASE = "When %s has decreased by";
+    private final static String FORMAT_STR_INCREASE_BASE = "When %s has increased by";
+    private final static String FORMAT_STR_DECREASE_BASE = "When %s has decreased by";
     private final static String formatStrIncrease, formatStrDecrease;
     
     static
     {
         if(android.os.Build.VERSION.SDK_INT > 22)
         {
-            formatStrIncrease = "\uD83D\uDCC8 " + FORMATE_STR_INCREASE_BASE;
-            formatStrDecrease = "\uD83D\uDCC9 " + FORMATE_STR_DECREASE_BASE;
+            formatStrIncrease = "\uD83D\uDCC8 " + FORMAT_STR_INCREASE_BASE;
+            formatStrDecrease = "\uD83D\uDCC9 " + FORMAT_STR_DECREASE_BASE;
         }
         else
         {
-            formatStrIncrease = FORMATE_STR_INCREASE_BASE;
-            formatStrDecrease = FORMATE_STR_DECREASE_BASE;
+            formatStrIncrease = FORMAT_STR_INCREASE_BASE;
+            formatStrDecrease = FORMAT_STR_DECREASE_BASE;
         }
     }
     
@@ -67,6 +69,8 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         final Button buttonSave = (Button)findViewById(R.id.button_conversion_save);
         final CheckBox checkBoxIncreased = (CheckBox)findViewById(R.id.check_box_increased);
         final CheckBox checkBoxDecreased = (CheckBox)findViewById(R.id.check_box_decreased);
+    
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         final Conversion conversion = ActivityMain
                 .conversions
@@ -142,6 +146,22 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         });
     }
     
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(ActivityMain.preferences.getBoolean(getString(R.string.key_preference_ads), false))
+            ((FrameLayout)findViewById(R.id.ad_frame_preferences_conversion))
+                    .addView(ActivityMain.adViewPreferencesConversion);
+    }
+    
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        ((FrameLayout)findViewById(R.id.ad_frame_preferences_conversion)).removeAllViews();
+    }
+    
     String getPrefKeyStr(final @StringRes int preferenceyKey, final Conversion conversion)
     {
         return getString(preferenceyKey) + conversion.getKeyString();
@@ -149,14 +169,12 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     
     void setPrefBool(final Conversion conversion, final @StringRes int preferenceKey, final boolean value)
     {
-        ActivityMain.preferencesEditor.putInt(getPrefKeyStr(preferenceKey, conversion), value ? 1 : 0);
+        ActivityMain.preferencesEditor.putBoolean(getPrefKeyStr(preferenceKey, conversion), value);
     }
     
     boolean getPrefBool(final Conversion conversion, final @StringRes int preferenceKey, final boolean defValue)
     {
-        if(ActivityMain.preferences.getInt(getPrefKeyStr(preferenceKey, conversion), defValue ? 1 : 0) == 0)
-            return false;
-        return true;
+        return ActivityMain.preferences.getBoolean(getPrefKeyStr(preferenceKey, conversion), defValue);
     }
     
     boolean getPrefBool(final Conversion conversion, final @StringRes int preferenceKey)
