@@ -152,7 +152,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         super.onResume();
         if(ActivityMain.preferences.getBoolean(getString(R.string.key_preference_ads), false))
             ((FrameLayout)findViewById(R.id.ad_frame_preferences_conversion))
-                    .addView(ActivityMain.adViewPreferencesConversion);
+                    .addView(ActivityMain.adViewPrefsConversion);
     }
     
     @Override

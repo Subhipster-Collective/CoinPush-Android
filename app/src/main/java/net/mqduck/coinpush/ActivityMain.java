@@ -55,7 +55,7 @@ public class ActivityMain extends AppCompatActivity
     static SharedPreferences.Editor preferencesEditor;
     static Runnable updateRunnable;
     static Handler updateHandler;
-    static AdView adViewMain, adViewPreferencesConversion;
+    static AdView adViewMain, adViewPrefsConversion;
     static boolean mobileAdsUninitialized = true;
     
     @SuppressLint("CommitPrefEdits")
@@ -220,13 +220,13 @@ public class ActivityMain extends AppCompatActivity
                                                                 FrameLayout.LayoutParams.WRAP_CONTENT));
         adViewMain.loadAd(new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC").build());
         
-        adViewPreferencesConversion = new AdView(this);
-        adViewPreferencesConversion.setAdSize(AdSize.SMART_BANNER);
-        adViewPreferencesConversion.setAdUnitId(AD_UNIT_ID_CONVERSION);
-        adViewPreferencesConversion.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                                                                FrameLayout.LayoutParams.WRAP_CONTENT));
-        adViewPreferencesConversion.loadAd(new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC")
-                                                                  .build());
+        adViewPrefsConversion = new AdView(this);
+        adViewPrefsConversion.setAdSize(AdSize.SMART_BANNER);
+        adViewPrefsConversion.setAdUnitId(AD_UNIT_ID_CONVERSION);
+        adViewPrefsConversion.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+                                                                           FrameLayout.LayoutParams.WRAP_CONTENT));
+        adViewPrefsConversion.loadAd(new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC")
+                                                            .build());
         
         ((FrameLayout)findViewById(R.id.ad_frame_main)).addView(adViewMain);
     }
@@ -235,6 +235,6 @@ public class ActivityMain extends AppCompatActivity
     {
         ((FrameLayout)findViewById(R.id.ad_frame_main)).removeView(adViewMain);
         adViewMain = null;
-        adViewPreferencesConversion = null;
+        adViewPrefsConversion = null;
     }
 }

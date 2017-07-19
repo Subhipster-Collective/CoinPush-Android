@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 /**
@@ -37,7 +38,7 @@ public class FragmentAddConversion extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_conversion, null);
     
@@ -47,11 +48,11 @@ public class FragmentAddConversion extends DialogFragment
         final Spinner spinnerTo = (Spinner)view.findViewById(R.id.spinner_currency_to);
         
         adapterFrom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterTo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFrom.setAdapter(adapterFrom);
-        spinnerTo.setAdapter(adapterTo);
         spinnerFrom.setSelection(ActivityMain.preferences
                                          .getInt(getString(R.string.key_preference_add_conversion_default_from), 0));
+        adapterTo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTo.setAdapter(adapterTo);
         spinnerTo.setSelection(ActivityMain.preferences
                                        .getInt(getString(R.string.key_preference_add_conversion_default_to), 0));
         
@@ -76,12 +77,31 @@ public class FragmentAddConversion extends DialogFragment
                     }
                 })
                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                   @Override public void onClick(DialogInterface dialog, int which)
-                   {
-                       
-                   }
+                   @Override public void onClick(DialogInterface dialog, int which) {}
                });
+        final AlertDialog dialog = builder.create();
         
-        return builder.create();
+        final Runnable setAddButtonEnabled = () -> {
+            boolean tf = ActivityMain.conversions.contains((Currency)spinnerFrom.getSelectedItem(),
+                                                           (Currency)spinnerTo.getSelectedItem());
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!tf);
+        };
+        
+        spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                setAddButtonEnabled.run();
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        spinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                setAddButtonEnabled.run();
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        
+        return dialog;
     }
 }
