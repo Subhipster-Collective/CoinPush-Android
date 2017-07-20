@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 public class ActivityMain extends AppCompatActivity
 {
@@ -91,9 +94,9 @@ public class ActivityMain extends AppCompatActivity
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
     
-        /*Map<String, ?> allEntries = preferences.getAll();
+        Map<String, ?> allEntries = preferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet())
-            Log.d("foo", entry.getKey() + ": " + entry.getValue().toString());*/
+            Log.d("foo", entry.getKey() + ": " + entry.getValue().toString());
         
         if(preferences.getBoolean(getString(R.string.key_preference_ads), false))
             enableAds();
@@ -140,6 +143,7 @@ public class ActivityMain extends AppCompatActivity
     public void onStart()
     {
         super.onStart();
+        
         user = auth.getCurrentUser();
         if(user == null)
         {
@@ -151,6 +155,7 @@ public class ActivityMain extends AppCompatActivity
                     if(task.isSuccessful())
                     {
                         user = auth.getCurrentUser();
+                        databaseReference = database.getReference("users").child(user.getUid());
                     }
                     else
                     {
@@ -159,6 +164,8 @@ public class ActivityMain extends AppCompatActivity
                 }
             });
         }
+        else
+            databaseReference = database.getReference("users").child(user.getUid());
     }
     
     @Override

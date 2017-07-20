@@ -30,6 +30,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.Locale;
 
 public class ActivityPreferencesConversion extends AppCompatActivity
@@ -75,6 +77,11 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         final Conversion conversion = ActivityMain
                 .conversions
                 .get(getIntent().getIntExtra(getString(R.string.key_intent_conversions_index), -1));
+    
+        final DatabaseReference dbReference = ActivityMain
+                .databaseReference
+                .child("conversions")
+                .child(conversion.getKeyString());
         
         boolean pushIncreasedEnabled, pushDecreasedEnabled;
         pushIncreasedEnabled = getPrefBool(conversion, R.string.key_preference_push_enabled_increase);
@@ -125,6 +132,12 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 setPrefBool(conversion, R.string.key_preference_push_enabled_increase, checkBoxIncreased.isChecked());
                 setPrefBool(conversion, R.string.key_preference_push_enabled_decrease, checkBoxDecreased.isChecked());
                 ActivityMain.preferencesEditor.commit();
+    
+                dbReference.child("threatholdIncreased").setValue(Double.valueOf(editTextIncreased.getText().toString()));
+                dbReference.child("threatholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
+                dbReference.child("pushIncreased").setValue(checkBoxIncreased.isChecked());
+                dbReference.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
+                
                 finish();
             }
         });
@@ -141,6 +154,9 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
                                                          ActivityMain.conversions.getConverionsString());
                 ActivityMain.preferencesEditor.commit();
+                
+                dbReference.removeValue();
+                
                 finish();
             }
         });
