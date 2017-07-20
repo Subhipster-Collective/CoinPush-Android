@@ -81,10 +81,13 @@ public class FragmentAddConversion extends DialogFragment
                });
         final AlertDialog dialog = builder.create();
         
-        final Runnable setAddButtonEnabled = () -> {
-            boolean tf = ActivityMain.conversions.contains((Currency)spinnerFrom.getSelectedItem(),
-                                                           (Currency)spinnerTo.getSelectedItem());
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!tf);
+        final Runnable setAddButtonEnabled = new Runnable() {
+            @Override public void run()
+            {
+                boolean tf = ActivityMain.conversions.contains((Currency)spinnerFrom.getSelectedItem(),
+                                                               (Currency)spinnerTo.getSelectedItem());
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!tf);
+            }
         };
         
         spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

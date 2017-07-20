@@ -26,6 +26,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -39,6 +40,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ActivityMain extends AppCompatActivity
 {
@@ -57,6 +65,10 @@ public class ActivityMain extends AppCompatActivity
     static Handler updateHandler;
     static AdView adViewMain, adViewPrefsConversion;
     static boolean mobileAdsUninitialized = true;
+    static FirebaseAuth auth;
+    static FirebaseUser user;
+    static FirebaseDatabase database;
+    static DatabaseReference databaseReference;
     
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -75,6 +87,13 @@ public class ActivityMain extends AppCompatActivity
     
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferencesEditor = preferences.edit();
+        
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+    
+        /*Map<String, ?> allEntries = preferences.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet())
+            Log.d("foo", entry.getKey() + ": " + entry.getValue().toString());*/
         
         if(preferences.getBoolean(getString(R.string.key_preference_ads), false))
             enableAds();
@@ -115,6 +134,31 @@ public class ActivityMain extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
+    }
+    
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        user = auth.getCurrentUser();
+        if(user == null)
+        {
+            auth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task)
+                {
+                    if(task.isSuccessful())
+                    {
+                        user = auth.getCurrentUser();
+                    }
+                    else
+                    {
+                        // do stuff that should be done
+                    }
+                }
+            });
+        }
     }
     
     @Override
