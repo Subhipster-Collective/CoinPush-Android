@@ -36,7 +36,7 @@ import java.util.Locale;
 
 public class ActivityPreferencesConversion extends AppCompatActivity
 {
-    private final static float DEFAULT_THRESHOLD = 10.0f;
+    private final static float DEFAULT_THRESHOLD = 3.0f;
     private final static String FORMAT_STR_INCREASE_BASE = "When %s has increased by";
     private final static String FORMAT_STR_DECREASE_BASE = "When %s has decreased by";
     private final static String formatStrIncrease, formatStrDecrease;
