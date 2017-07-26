@@ -160,8 +160,8 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 setPrefBool(conversion, R.string.key_preference_push_enabled_decrease, checkBoxDecreased.isChecked());
                 ActivityMain.preferencesEditor.commit();
     
-                dbReference.child("threatholdIncreased").setValue(Double.valueOf(editTextIncreased.getText().toString()));
-                dbReference.child("threatholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
+                dbReference.child("thresholdIncreased").setValue(Double.valueOf(editTextIncreased.getText().toString()));
+                dbReference.child("thresholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
                 dbReference.child("pushIncreased").setValue(checkBoxIncreased.isChecked());
                 dbReference.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
                 
