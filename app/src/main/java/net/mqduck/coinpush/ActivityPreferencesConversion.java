@@ -36,10 +36,21 @@ import java.util.Locale;
 
 public class ActivityPreferencesConversion extends AppCompatActivity
 {
-    private final static float DEFAULT_THRESHOLD = 3.0f;
+    private final static float DEFAULT_THRESHOLD = 30.0f;
     private final static String FORMAT_STR_INCREASE_BASE = "When %s has increased by";
     private final static String FORMAT_STR_DECREASE_BASE = "When %s has decreased by";
     private final static String formatStrIncrease, formatStrDecrease;
+    
+    private TextView textConversion;
+    private TextView textConversionValue;
+    private TextView textNotifyIncreased;
+    private TextView textNotifyDecreased;
+    private EditText editTextIncreased;
+    private EditText editTextDecreased;
+    private Button buttonRemove;
+    private Button buttonSave;
+    private CheckBox checkBoxIncreased;
+    private CheckBox checkBoxDecreased;
     
     static
     {
@@ -61,16 +72,16 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversion_preferences);
     
-        final TextView textConversion = (TextView)findViewById(R.id.text_preferences_conversion);
-        final TextView textConversionValue = (TextView)findViewById(R.id.text_preferences_conversion_value);
-        final TextView textNotifyIncrease = (TextView)findViewById(R.id.text_notify_increase);
-        final TextView textNotifyDecrease = (TextView)findViewById(R.id.text_notify_decrease);
-        final EditText editTextIncreased = (EditText)findViewById(R.id.edit_text_increased);
-        final EditText editTextDecreased = (EditText)findViewById(R.id.edit_text_decreased);
-        final Button buttonRemove = (Button)findViewById(R.id.button_conversion_remove);
-        final Button buttonSave = (Button)findViewById(R.id.button_conversion_save);
-        final CheckBox checkBoxIncreased = (CheckBox)findViewById(R.id.check_box_increased);
-        final CheckBox checkBoxDecreased = (CheckBox)findViewById(R.id.check_box_decreased);
+        textConversion = (TextView)findViewById(R.id.text_preferences_conversion);
+        textConversionValue = (TextView)findViewById(R.id.text_preferences_conversion_value);
+        textNotifyIncreased = (TextView)findViewById(R.id.text_notify_increase);
+        textNotifyDecreased = (TextView)findViewById(R.id.text_notify_decrease);
+        editTextIncreased = (EditText)findViewById(R.id.edit_text_increased);
+        editTextDecreased = (EditText)findViewById(R.id.edit_text_decreased);
+        buttonRemove = (Button)findViewById(R.id.button_conversion_remove);
+        buttonSave = (Button)findViewById(R.id.button_conversion_save);
+        checkBoxIncreased = (CheckBox)findViewById(R.id.check_box_increased);
+        checkBoxDecreased = (CheckBox)findViewById(R.id.check_box_decreased);
     
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
@@ -105,8 +116,21 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                                              conversion.currencyFrom.symbol,
                                              conversion.currencyTo.symbol,
                                              conversion.getValue()) );
-        textNotifyIncrease.setText(String.format(formatStrIncrease, conversion.currencyFrom.code));
-        textNotifyDecrease.setText(String.format(formatStrDecrease, conversion.currencyFrom.code));
+        textNotifyIncreased.setText(String.format(formatStrIncrease, conversion.currencyFrom.code));
+        textNotifyDecreased.setText(String.format(formatStrDecrease, conversion.currencyFrom.code));
+        
+        editTextIncreased.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override public void onFocusChange(View view, boolean hasFocus)
+            {
+                verifyPushSetting(editTextIncreased, checkBoxIncreased);
+            }
+        });
+        editTextDecreased.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override public void onFocusChange(View view, boolean hasFocus)
+            {
+                verifyPushSetting(editTextDecreased, checkBoxDecreased);
+            }
+        });
     
         checkBoxIncreased.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v)
@@ -125,6 +149,9 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v)
             {
+                verifyPushSetting(editTextIncreased, checkBoxIncreased);
+                verifyPushSetting(editTextDecreased, checkBoxDecreased);
+                
                 setPrefFloat(conversion, R.string.key_preference_push_threshold_increase,
                              editTextIncreased.getText().toString());
                 setPrefFloat(conversion, R.string.key_preference_push_threshold_decrease,
@@ -213,5 +240,15 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     void removePref(final Conversion conversion, final @StringRes int preferenceKey)
     {
         ActivityMain.preferencesEditor.remove(getPrefKeyStr(preferenceKey, conversion));
+    }
+    
+    void verifyPushSetting(final EditText editText, final CheckBox checkBox)
+    {
+        if(editText.getText().toString().isEmpty() || Float.valueOf(editText.getText().toString()) <= 0)
+        {
+            editText.setText(String.format(Locale.getDefault(), Float.toString(DEFAULT_THRESHOLD)));
+            editText.setEnabled(false);
+            checkBox.setChecked(false);
+        }
     }
 }
