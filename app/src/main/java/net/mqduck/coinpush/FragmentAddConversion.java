@@ -60,10 +60,10 @@ public class FragmentAddConversion extends DialogFragment
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which)
                     {
-                        ActivityMain.conversions.add(new Conversion((Currency)spinnerFrom.getSelectedItem(),
-                                                                    (Currency)spinnerTo.getSelectedItem()));
+                        ActivityMain.conversions.add( new Conversion((Currency)spinnerFrom.getSelectedItem(),
+                                                                     (Currency)spinnerTo.getSelectedItem(),
+                                                                     getActivity()) );
                         ActivityMain.conversionAdapter.notifyDataSetChanged();
-                        ActivityMain.updateData();
                         ActivityMain.preferencesEditor
                                 .putString(getString(R.string.key_preference_conversions),
                                            ActivityMain.conversions.getConverionsString());

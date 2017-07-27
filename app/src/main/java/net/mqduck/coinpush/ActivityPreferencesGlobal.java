@@ -21,7 +21,6 @@ package net.mqduck.coinpush;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
 
 /**
  * Created by mqduck on 7/11/17.
@@ -35,19 +34,13 @@ public class ActivityPreferencesGlobal extends AppCompatPreferenceActivity
     {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        setPreferenceRefreshTitle(getString(R.string.key_preference_refresh_delay));
         setResult(getResources().getInteger(R.integer.request_preferences_global), getIntent());
     }
     
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        if( key.equals(getString(R.string.key_preference_refresh_delay)) )
-        {
-            setPreferenceRefreshTitle(key);
-            getIntent().putExtra( key, Integer.valueOf(sharedPreferences.getString(key, "")) );
-        }
-        else if( key.equals(getString(R.string.key_preference_ads)) )
+        if( key.equals(getString(R.string.key_preference_ads)) )
             getIntent().putExtra(key, sharedPreferences.getBoolean(key, false));
     }
     
@@ -63,11 +56,5 @@ public class ActivityPreferencesGlobal extends AppCompatPreferenceActivity
     {
         super.onPause();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-    
-    private void setPreferenceRefreshTitle(String key)
-    {
-        ListPreference preferenceRefresh = (ListPreference)findPreference(key);
-        preferenceRefresh.setTitle("Refresh every " + preferenceRefresh.getEntry());
     }
 }

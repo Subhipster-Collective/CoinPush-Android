@@ -20,16 +20,14 @@
 package net.mqduck.coinpush;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,10 +44,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Map;
+import com.google.firebase.database.ValueEventListener;
 
 public class ActivityMain extends AppCompatActivity
 {
@@ -57,21 +56,20 @@ public class ActivityMain extends AppCompatActivity
     private final static String AD_UNIT_ID_MAIN = "ca-app-pub-9926113995373020/3674436196";
     private final static String AD_UNIT_ID_CONVERSION = "ca-app-pub-9926113995373020/8551960990";
     
-    private static int updateDelay;
+    private BroadcastReceiver broadCastReceiver;
     
     static ConversionList conversions;// = new ConversionList();
     static ConversionAdapter conversionAdapter;
     static float emojiSize;
     static SharedPreferences preferences;
     static SharedPreferences.Editor preferencesEditor;
-    static Runnable updateRunnable;
-    static Handler updateHandler;
     static AdView adViewMain, adViewPrefsConversion;
     static boolean mobileAdsUninitialized = true;
     static FirebaseAuth auth;
     static FirebaseUser user;
     static FirebaseDatabase database;
-    static DatabaseReference databaseReference;
+    static DatabaseReference databaseReferenceConversionData;
+    static DatabaseReference databaseReferenceChild;
     
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -94,16 +92,15 @@ public class ActivityMain extends AppCompatActivity
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
     
-        Map<String, ?> allEntries = preferences.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet())
-            Log.d("foo", entry.getKey() + ": " + entry.getValue().toString());
+        // Print preferences
+        //Map<String, ?> allEntries = preferences.getAll();
+        //for (Map.Entry<String, ?> entry : allEntries.entrySet())
+        //    Log.d("foo", entry.getKey() + ": " + entry.getValue().toString());
         
         if(preferences.getBoolean(getString(R.string.key_preference_ads), false))
             enableAds();
         
-        conversions = new ConversionList(preferences.getString(getString(R.string.key_preference_conversions), null));
-        updateDelay = Integer.valueOf(preferences.getString(getString(R.string.key_preference_refresh_delay),
-                                                            getString(R.string.refresh_delay_default)));
+        conversions = new ConversionList(preferences.getString(getString(R.string.key_preference_conversions), null), this);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -116,33 +113,17 @@ public class ActivityMain extends AppCompatActivity
         });
         conversionAdapter = new ConversionAdapter(this, conversions);
         list.setAdapter(conversionAdapter);
-    
-        updateRunnable = new Runnable() {
-            @Override public void run()
-            {
-                updateDataThread();
-                updateHandler.postDelayed(this, updateDelay);
-            }
-        };
-        updateHandler = new Handler();
-        updateHandler.post(updateRunnable);
-        
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
     }
     
     @Override
     public void onStart()
     {
         super.onStart();
+        
+        databaseReferenceConversionData = database.getReference("conversionData");
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(getString(R.string.key_broadcast_database_reference_loaded));
+        sendBroadcast(broadcastIntent);
         
         user = auth.getCurrentUser();
         if(user == null)
@@ -155,7 +136,7 @@ public class ActivityMain extends AppCompatActivity
                     if(task.isSuccessful())
                     {
                         user = auth.getCurrentUser();
-                        databaseReference = database.getReference("users").child(user.getUid());
+                        databaseReferenceChild = database.getReference("users/" + user.getUid());
                     }
                     else
                     {
@@ -165,7 +146,17 @@ public class ActivityMain extends AppCompatActivity
             });
         }
         else
-            databaseReference = database.getReference("users").child(user.getUid());
+        {
+            databaseReferenceChild = database.getReference("users").child(user.getUid());
+        }
+        
+        databaseReferenceConversionData.addValueEventListener(new ValueEventListener() {
+            @Override public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                conversionAdapter.notifyDataSetChanged();
+            }
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        });
     }
     
     @Override
@@ -197,9 +188,6 @@ public class ActivityMain extends AppCompatActivity
         case R.id.action_add_currency:
             new FragmentAddConversion().show(getFragmentManager(), "FOO");
             return true;
-        case R.id.action_refresh:
-            updateData();
-            return true;
         case R.id.action_settings:
             //startActivity(new Intent(this, ActivityPreferencesGlobal.class));
             startActivityForResult(new Intent(this, ActivityPreferencesGlobal.class), getResources().getInteger(R.integer.request_preferences_global));
@@ -214,11 +202,8 @@ public class ActivityMain extends AppCompatActivity
     {
         if(requestCode == getResources().getInteger(R.integer.request_preferences_global))
         {
-            String keyDelay = getString(R.string.key_preference_refresh_delay);
             String keyAds = getString(R.string.key_preference_ads);
             
-            if(data.hasExtra(keyDelay))
-                setUpdateDelay(data.getIntExtra(keyDelay, -1));
             if(data.hasExtra(keyAds))
             {
                 if(data.getBooleanExtra(keyAds, false))
@@ -227,33 +212,6 @@ public class ActivityMain extends AppCompatActivity
                     disableAds();
             }
         }
-    }
-    
-    private static void updateDataThread()
-    {
-        new AsyncTask<Void, Void, Void>() {
-            @Override protected Void doInBackground(Void... params)
-            {
-                Currency.updateJsons();
-                for(Conversion conversion : conversions)
-                    conversion.update();
-                return null;
-            }
-            @Override protected void onPostExecute(Void result) { conversionAdapter.notifyDataSetChanged(); }
-        }.execute();
-    }
-    
-    static void updateData()
-    {
-        updateHandler.removeCallbacks(updateRunnable);
-        updateHandler.post(updateRunnable);
-    }
-    
-    static void setUpdateDelay(final int updateDelay)
-    {
-        ActivityMain.updateDelay = updateDelay;
-        updateHandler.removeCallbacks(updateRunnable);
-        updateHandler.postDelayed(updateRunnable, updateDelay);
     }
     
     void enableAds()

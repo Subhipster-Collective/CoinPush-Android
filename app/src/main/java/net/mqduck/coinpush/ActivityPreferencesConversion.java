@@ -90,7 +90,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 .get(getIntent().getIntExtra(getString(R.string.key_intent_conversions_index), -1));
     
         final DatabaseReference dbReference = ActivityMain
-                .databaseReference
+                .databaseReferenceChild
                 .child("conversions")
                 .child(conversion.getKeyString());
         
