@@ -26,7 +26,6 @@ import android.content.IntentFilter;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 /**
@@ -35,17 +34,14 @@ import com.google.firebase.database.ValueEventListener;
 
 class Conversion
 {
-    private final static String DATUM_VALUE = "PRICE";
-    private final static String DATUM_CHANGE = "CHANGEPCT24HOUR";
-    
     private final static IntentFilter
             broadcastFilter = new IntentFilter("net.mqduck.coinpush.broadcast_database_reference_loaded");
     
     final Currency currencyFrom, currencyTo;
     final private Context context;
     private BroadcastReceiver broadCastReceiver;
-    private DatabaseReference dbReference;
     private Double value = 0.0, change = 0.0;
+    private boolean dataUninitialized = true;
     
     Conversion(final Currency currencyFrom, final Currency currencyTo, final Context context)
     {
@@ -53,10 +49,6 @@ class Conversion
         this.currencyTo = currencyTo;
         this.context = context;
         setdbReference();
-        dbReference = ActivityMain
-                .databaseReferenceConversionData
-                .child(currencyFrom.code.toString())
-                .child(currencyTo.code.toString());
     }
     
     Conversion(final Currency.Code codeFrom, final Currency.Code codeTo, final Context context)
@@ -77,24 +69,40 @@ class Conversion
     
     private void setdbReference()
     {
-        broadCastReceiver = new BroadcastReceiver() {
-            @Override public void onReceive(Context context, Intent intent)
+        if(ActivityMain.databaseReferenceConversionData == null)
+        {
+            broadCastReceiver = new BroadcastReceiver()
             {
-                dbReference = ActivityMain
-                        .databaseReferenceConversionData
-                        .child(currencyFrom.code.toString())
-                        .child(currencyTo.code.toString());
-                dbReference.addValueEventListener(new ValueEventListener() {
-                    @Override public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-                        value = (Double)dataSnapshot.child("PRICE").getValue();
-                        change = (Double)dataSnapshot.child("CHANGEPCT24HOUR").getValue();
-                    }
-                    @Override public void onCancelled(DatabaseError databaseError) {}
-                });
+                @Override
+                public void onReceive(Context context, Intent intent)
+                {
+                    addListener();
+                }
+            };
+            registerReceiver();
+        }
+        else
+            addListener();
+    }
+    
+    private void addListener()
+    {
+        ActivityMain.databaseReferenceConversionData
+                .child(currencyFrom.code.toString())
+                .child(currencyTo.code.toString())
+                .addValueEventListener(new ValueEventListener() {
+            @Override public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                value = Double.valueOf(dataSnapshot.child("PRICE").getValue().toString());
+                change = Double.valueOf(dataSnapshot.child("CHANGEPCT24HOUR").getValue().toString());
+                if(dataUninitialized)
+                {
+                    ActivityMain.conversionAdapter.notifyDataSetChanged();
+                    dataUninitialized = false;
+                }
             }
-        };
-        registerReceiver();
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        });
     }
     
     void registerReceiver()
