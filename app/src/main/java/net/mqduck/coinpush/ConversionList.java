@@ -19,8 +19,6 @@
 
 package net.mqduck.coinpush;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 
 /**
@@ -37,13 +35,13 @@ class ConversionList extends ArrayList<Conversion>
         super();
     }
     
-    ConversionList(final String conversionsString, final Context context)
+    ConversionList(final String conversionsString)
     {
         if(conversionsString != null && !conversionsString.isEmpty())
             for(String conStr : conversionsString.split(DELIMITER_CONVERSION))
             {
                 String[] currencyCodes = conStr.split(DELIMITER_CURRENCY);
-                add(new Conversion(currencyCodes[0], currencyCodes[1], context));
+                add(new Conversion(currencyCodes[0], currencyCodes[1]));
             }
     }
     
@@ -150,5 +148,17 @@ class ConversionList extends ArrayList<Conversion>
     public boolean contains(final String codeStrFrom, final String codeStrTo)
     {
         return contains(Currency.Code.valueOf(codeStrFrom), Currency.Code.valueOf(codeStrTo));
+    }
+    
+    public void addListeners()
+    {
+        for(final Conversion conversion : this)
+            conversion.addListener();
+    }
+    
+    public void removeListeners()
+    {
+        for(final Conversion conversion : this)
+            conversion.removeListener();
     }
 }

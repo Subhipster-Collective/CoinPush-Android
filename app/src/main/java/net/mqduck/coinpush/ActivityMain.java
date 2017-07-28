@@ -20,8 +20,8 @@
 package net.mqduck.coinpush;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -56,7 +56,15 @@ public class ActivityMain extends AppCompatActivity
     private final static String AD_UNIT_ID_MAIN = "ca-app-pub-9926113995373020/3674436196";
     private final static String AD_UNIT_ID_CONVERSION = "ca-app-pub-9926113995373020/8551960990";
     
-    private BroadcastReceiver broadCastReceiver;
+    private ValueEventListener eventListener = new ValueEventListener() {
+        @Override public void onDataChange(DataSnapshot dataSnapshot)
+        {
+            conversionAdapter.notifyDataSetChanged(); // Add code to skip this call on first run?
+        }
+        @Override public void onCancelled(DatabaseError databaseError) {}
+    };
+    
+    static IntentFilter broadcastFilterDatabaseLoaded;
     
     static ConversionList conversions;// = new ConversionList();
     static ConversionAdapter conversionAdapter;
@@ -69,6 +77,7 @@ public class ActivityMain extends AppCompatActivity
     static FirebaseUser user;
     static FirebaseDatabase database;
     static DatabaseReference databaseReferenceConversionData;
+    static DatabaseReference databaseReferenceConversionDataTimestamp;
     static DatabaseReference databaseReferenceChild;
     
     @SuppressLint("CommitPrefEdits")
@@ -85,6 +94,9 @@ public class ActivityMain extends AppCompatActivity
         final FrameLayout adFrameMain = (FrameLayout)findViewById(R.id.ad_frame_main);
         
         setSupportActionBar(toolbar);
+        
+        broadcastFilterDatabaseLoaded
+                = new IntentFilter(getString(R.string.key_broadcast_database_reference_loaded));
     
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferencesEditor = preferences.edit();
@@ -100,7 +112,7 @@ public class ActivityMain extends AppCompatActivity
         if(preferences.getBoolean(getString(R.string.key_preference_ads), false))
             enableAds();
         
-        conversions = new ConversionList(preferences.getString(getString(R.string.key_preference_conversions), null), this);
+        conversions = new ConversionList(preferences.getString(getString(R.string.key_preference_conversions), null));
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -121,9 +133,7 @@ public class ActivityMain extends AppCompatActivity
         super.onStart();
         
         databaseReferenceConversionData = database.getReference("conversionData");
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(getString(R.string.key_broadcast_database_reference_loaded));
-        sendBroadcast(broadcastIntent);
+        databaseReferenceConversionDataTimestamp = databaseReferenceConversionData.child("timestamp");
         
         user = auth.getCurrentUser();
         if(user == null)
@@ -150,13 +160,17 @@ public class ActivityMain extends AppCompatActivity
             databaseReferenceChild = database.getReference("users").child(user.getUid());
         }
         
-        databaseReferenceConversionData.addValueEventListener(new ValueEventListener() {
-            @Override public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                conversionAdapter.notifyDataSetChanged();
-            }
-            @Override public void onCancelled(DatabaseError databaseError) {}
-        });
+        conversions.addListeners();
+        databaseReferenceConversionDataTimestamp.addValueEventListener(eventListener);
+    }
+    
+    @Override
+    public void onStop()
+    {
+        conversions.removeListeners();
+        databaseReferenceConversionDataTimestamp.removeEventListener(eventListener);
+        
+        super.onStop();
     }
     
     @Override
