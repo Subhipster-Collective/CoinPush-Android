@@ -25,7 +25,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -44,12 +44,6 @@
         </activity>
         <activity android:name="org.subhipstercollective.coinpush.ActivityPreferencesGlobal">
         </activity>
-        <!--<service
-            android:name=".MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>-->
         <service
             android:name="org.subhipstercollective.coinpush.CoinPushFirebaseInstanceIDService">
             <intent-filter>

@@ -21,7 +21,6 @@ package org.subhipstercollective.coinpush;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -65,8 +64,6 @@ public class ActivityMain extends AppCompatActivity
         @Override public void onCancelled(DatabaseError databaseError) {}
     };
     
-    static IntentFilter broadcastFilterDatabaseLoaded;
-    
     static ConversionList conversions;// = new ConversionList();
     static ConversionAdapter conversionAdapter;
     static float emojiSize;
@@ -99,9 +96,6 @@ public class ActivityMain extends AppCompatActivity
         adFrameMain = (FrameLayout)findViewById(R.id.ad_frame_main);
         
         setSupportActionBar(toolbar);
-        
-        broadcastFilterDatabaseLoaded
-                = new IntentFilter(getString(R.string.key_broadcast_database_reference_loaded));
     
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferencesEditor = preferences.edit();
