@@ -85,13 +85,13 @@ class Currency
         
         currencyListTo = new ArrayList<>();
         currencyListTo.add(currencies.get(Code.USD));
-        currencyListTo.add(currencies.get(Code.CNY));
         currencyListTo.add(currencies.get(Code.EUR));
         currencyListTo.add(currencies.get(Code.JPY));
         currencyListTo.add(currencies.get(Code.GBP));
         currencyListTo.add(currencies.get(Code.AUD));
         currencyListTo.add(currencies.get(Code.CAD));
         currencyListTo.add(currencies.get(Code.CHF));
+        currencyListTo.add(currencies.get(Code.CNY));
         currencyListTo.addAll(currencyListFrom);
         
         valueFormat = NumberFormat.getCurrencyInstance();
