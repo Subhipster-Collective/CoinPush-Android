@@ -22,10 +22,6 @@ package net.mqduck.coinpush;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-/**
- * Created by mqduck on 7/11/17.
- */
-
 public class ActivityPreferencesGlobal extends AppCompatPreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener
 {

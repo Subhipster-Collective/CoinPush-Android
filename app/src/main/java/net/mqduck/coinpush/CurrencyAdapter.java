@@ -20,6 +20,7 @@
 package net.mqduck.coinpush;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,11 +31,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by mqduck on 7/8/17.
- */
-
-public class CurrencyAdapter extends ArrayAdapter<Currency>
+class CurrencyAdapter extends ArrayAdapter<Currency>
 {
     private ArrayList<Currency> currencies;
     private LayoutInflater inflater;
@@ -47,7 +44,8 @@ public class CurrencyAdapter extends ArrayAdapter<Currency>
         this.currencies = currencies;
     }
     
-    public View getView(final int position, final View convertView, final ViewGroup parent)
+    @NonNull
+    public View getView(final int position, final View convertView, @NonNull final ViewGroup parent)
     {
         View currencyView = convertView == null ? inflater.inflate(R.layout.currency, parent, false) : convertView;
         ImageView icon = (ImageView)currencyView.findViewById(R.id.icon_currency);
@@ -63,7 +61,7 @@ public class CurrencyAdapter extends ArrayAdapter<Currency>
         return currencyView;
     }
     
-    public View getDropDownView(final int position, final View convertView, final ViewGroup parent)
+    public View getDropDownView(final int position, final View convertView, @NonNull final ViewGroup parent)
     {
         return getView(position, convertView, parent);
     }

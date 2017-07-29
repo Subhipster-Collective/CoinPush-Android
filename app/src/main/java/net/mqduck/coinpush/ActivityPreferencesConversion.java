@@ -151,6 +151,12 @@ public class ActivityPreferencesConversion extends AppCompatActivity
             {
                 verifyPushSetting(editTextIncreased, checkBoxIncreased);
                 verifyPushSetting(editTextDecreased, checkBoxDecreased);
+    
+                dbReference.child("thresholdIncreased").setValue(Double.valueOf(editTextIncreased.getText().toString()));
+                dbReference.child("thresholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
+                dbReference.child("pushIncreased").setValue(checkBoxIncreased.isChecked());
+                dbReference.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
+                dbReference.child("timeLastPushed").setValue(0);
                 
                 setPrefFloat(conversion, R.string.key_preference_push_threshold_increase,
                              editTextIncreased.getText().toString());
@@ -159,11 +165,6 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 setPrefBool(conversion, R.string.key_preference_push_enabled_increase, checkBoxIncreased.isChecked());
                 setPrefBool(conversion, R.string.key_preference_push_enabled_decrease, checkBoxDecreased.isChecked());
                 ActivityMain.preferencesEditor.commit();
-    
-                dbReference.child("thresholdIncreased").setValue(Double.valueOf(editTextIncreased.getText().toString()));
-                dbReference.child("thresholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
-                dbReference.child("pushIncreased").setValue(checkBoxIncreased.isChecked());
-                dbReference.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
                 
                 finish();
             }

@@ -49,6 +49,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class ActivityMain extends AppCompatActivity
 {
@@ -80,6 +81,10 @@ public class ActivityMain extends AppCompatActivity
     static DatabaseReference databaseReferenceConversionDataTimestamp;
     static DatabaseReference databaseReferenceChild;
     
+    private Toolbar toolbar;
+    private ListView list;
+    private FrameLayout adFrameMain;
+    
     @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,9 +94,9 @@ public class ActivityMain extends AppCompatActivity
         
         emojiSize = (float)0.7 * getResources().getDrawable(R.mipmap.ic_eth).getIntrinsicHeight();
         
-        final Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        final ListView list = (ListView)findViewById(R.id.list);
-        final FrameLayout adFrameMain = (FrameLayout)findViewById(R.id.ad_frame_main);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        list = (ListView)findViewById(R.id.list);
+        adFrameMain = (FrameLayout)findViewById(R.id.ad_frame_main);
         
         setSupportActionBar(toolbar);
         
@@ -117,7 +122,6 @@ public class ActivityMain extends AppCompatActivity
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Conversion conversion = conversions.get(position);
                 Intent intent = new Intent(parent.getContext(), ActivityPreferencesConversion.class);
                 intent.putExtra(getString(R.string.key_intent_conversions_index), position);
                 startActivity(intent);
@@ -147,6 +151,7 @@ public class ActivityMain extends AppCompatActivity
                     {
                         user = auth.getCurrentUser();
                         databaseReferenceChild = database.getReference("users/" + user.getUid());
+                        databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken().split("\"")[3]);
                     }
                     else
                     {
@@ -158,6 +163,7 @@ public class ActivityMain extends AppCompatActivity
         else
         {
             databaseReferenceChild = database.getReference("users").child(user.getUid());
+            databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken().split("\"")[3]);
         }
         
         conversions.addListeners();
@@ -203,7 +209,6 @@ public class ActivityMain extends AppCompatActivity
             new FragmentAddConversion().show(getFragmentManager(), "FOO");
             return true;
         case R.id.action_settings:
-            //startActivity(new Intent(this, ActivityPreferencesGlobal.class));
             startActivityForResult(new Intent(this, ActivityPreferencesGlobal.class), getResources().getInteger(R.integer.request_preferences_global));
             return true;
         default:
@@ -251,12 +256,12 @@ public class ActivityMain extends AppCompatActivity
         adViewPrefsConversion.loadAd(new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC")
                                                             .build());
         
-        ((FrameLayout)findViewById(R.id.ad_frame_main)).addView(adViewMain);
+        adFrameMain.addView(adViewMain);
     }
     
     void disableAds()
     {
-        ((FrameLayout)findViewById(R.id.ad_frame_main)).removeView(adViewMain);
+        adFrameMain.removeView(adViewMain);
         adViewMain = null;
         adViewPrefsConversion = null;
     }

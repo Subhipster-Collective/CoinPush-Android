@@ -21,14 +21,10 @@ package net.mqduck.coinpush;
 
 import java.util.ArrayList;
 
-/**
- * Created by mqduck on 7/6/17.
- */
-
 class ConversionList extends ArrayList<Conversion>
 {
-    final static String DELIMITER_CONVERSION = ";";
-    final static String DELIMITER_CURRENCY = ":";
+    final private static String DELIMITER_CONVERSION = ";";
+    final private static String DELIMITER_CURRENCY = ":";
     
     ConversionList()
     {
@@ -37,6 +33,7 @@ class ConversionList extends ArrayList<Conversion>
     
     ConversionList(final String conversionsString)
     {
+        super();
         if(conversionsString != null && !conversionsString.isEmpty())
             for(String conStr : conversionsString.split(DELIMITER_CONVERSION))
             {
@@ -58,51 +55,7 @@ class ConversionList extends ArrayList<Conversion>
     
     public boolean add(Conversion conversion)
     {
-        if(contains(conversion))
-            return false;
-        if(super.add(conversion))
-        {
-            conversion.currencyTo.addConversion(conversion.currencyFrom);
-            return true;
-        }
-        return false;
-    }
-    
-    public Conversion remove(int index)
-    {
-        Conversion conversion = super.remove(index);
-        conversion.currencyTo.removeConversion(conversion.currencyFrom);
-        return conversion;
-    }
-    
-    public boolean remove(Object conversion)
-    {
-        if(super.remove(conversion))
-        {
-            ((Conversion)conversion).currencyTo.removeConversion(((Conversion)conversion).currencyFrom);
-            return true;
-        }
-        return false;
-    }
-    
-    public boolean remove(final Currency currencyFrom, final Currency currencyTo)
-    {
-        return remove(get(currencyFrom, currencyTo));
-    }
-    
-    public boolean remove(final Currency.Code codeFrom, final Currency.Code codeTo)
-    {
-        return remove(get(codeFrom, codeTo));
-    }
-    
-    public boolean remove(final String codeStrFrom, final String codeStrTo)
-    {
-        return remove(get(codeStrFrom, codeStrTo));
-    }
-    
-    public boolean removeAll() // For now, don't call this
-    {
-        return false;
+        return !contains(conversion) && super.add(conversion);
     }
     
     public Conversion get(final Currency currencyFrom, final Currency currencyTo) // Throw exception when not found?

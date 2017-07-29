@@ -21,22 +21,9 @@ package net.mqduck.coinpush;
 
 import android.support.annotation.DrawableRes;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-/**
- * Created by mqduck on 7/4/17.
- */
 
 class Currency
 {
@@ -96,7 +83,7 @@ class Currency
         currencyListFrom.add(currencies.get(Code.XRP));
         currencyListFrom.add(currencies.get(Code.ETC));
         
-        currencyListTo = new ArrayList<Currency>();
+        currencyListTo = new ArrayList<>();
         currencyListTo.add(currencies.get(Code.USD));
         currencyListTo.add(currencies.get(Code.CNY));
         currencyListTo.add(currencies.get(Code.EUR));
@@ -118,10 +105,6 @@ class Currency
     final String symbol;
     @DrawableRes final int icon;
     final String emoji;
-    
-    private ArrayList<Currency> currencyFroms = new ArrayList<>(); // List of currencies to convert to this one // change to Set?
-    private String url = null;
-    JSONObject json = null;
     
     Currency(final Code code, final String name, final String symbol, @DrawableRes final int icon)
     {
@@ -148,71 +131,6 @@ class Currency
         this.symbol = symbol;
         icon = R.mipmap.ic_empty;
         emoji = "";
-    }
-    
-    static void updateJsons()
-    {
-        for(Code code : Code.values())
-            currencies.get(code).updateJson();
-    }
-    
-    private void updateJsonURL()
-    {
-        if(currencyFroms.isEmpty())
-        {
-            url = null;
-            return;
-        }
-        
-        String conversionCodes = "";
-        for(Currency currency : currencyFroms)
-            conversionCodes += currency.code + ",";
-        url = String.format(BASE_URL, conversionCodes, code);
-    }
-    
-    private void updateJson()
-    {
-        if(url == null)
-        {
-            json = null;
-            return;
-        }
-        
-        try
-        {
-            InputStream stream;
-            stream = new URL(url).openStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8")));
-            StringBuilder strBuilder = new StringBuilder();
-            int cp;
-            while((cp = reader.read()) != -1)
-                strBuilder.append((char)cp);
-            json = new JSONObject(strBuilder.toString()).getJSONObject("RAW");
-        }
-        catch(IOException | JSONException e)
-        {
-            e.printStackTrace();
-        }
-    }
-    
-    boolean addConversion(final Currency currency)
-    {
-        if(currencyFroms.add(currency))
-        {
-            updateJsonURL();
-            return true;
-        }
-        return false;
-    }
-    
-    boolean removeConversion(final Currency currency)
-    {
-        if(currencyFroms.remove(currency))
-        {
-            updateJsonURL();
-            return true;
-        }
-        return false;
     }
     
     public String toString(final boolean includeCode)

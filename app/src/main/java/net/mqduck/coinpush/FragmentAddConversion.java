@@ -29,10 +29,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-/**
- * Created by mqduck on 7/8/17.
- */
-
 public class FragmentAddConversion extends DialogFragment
 {
     @Override

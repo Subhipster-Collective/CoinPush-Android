@@ -23,10 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-/**
- * Created by mqduck on 7/4/17.
- */
-
 class Conversion
 {
     final Currency currencyFrom, currencyTo;
@@ -64,7 +60,7 @@ class Conversion
         currencyTo = Currency.currencies.get(Currency.Code.valueOf(codeStrTo));
     }
     
-    public void addListener()
+    void addListener()
     {
         if(ActivityMain.databaseReferenceConversionData != null)
             ActivityMain.databaseReferenceConversionData
@@ -73,7 +69,7 @@ class Conversion
                     .addValueEventListener(eventListener);
     }
     
-    public void removeListener()
+    void removeListener()
     {
         if(ActivityMain.databaseReferenceConversionData != null)
             ActivityMain.databaseReferenceConversionData
@@ -82,8 +78,8 @@ class Conversion
                     .removeEventListener(eventListener);
     }
     
-    public double getValue() { return value; }
-    public double getChange() { return change; }
+    double getValue() { return value; }
+    double getChange() { return change; }
     
     String getKeyString()
     {
