@@ -17,21 +17,22 @@
  * along with CoinPush-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.mqduck.coinpush;
+package org.subhipstercollective.coinpush;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by mqduck on 7/28/17.
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-
-public class CoinPushFirebaseInstanceIDService extends FirebaseInstanceIdService
+public class ExampleUnitTest
 {
-    @Override
-    public void onTokenRefresh()
+    @Test
+    public void addition_isCorrect() throws Exception
     {
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        ActivityMain.databaseReferenceChild.child("token").setValue(refreshedToken);
+        assertEquals(4, 2 + 2);
     }
 }

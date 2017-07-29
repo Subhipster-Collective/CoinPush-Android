@@ -17,7 +17,7 @@
  * along with CoinPush-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.mqduck.coinpush;
+package org.subhipstercollective.coinpush;
 
 import android.support.annotation.DrawableRes;
 

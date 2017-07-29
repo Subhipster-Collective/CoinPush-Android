@@ -19,7 +19,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="net.mqduck.coinpush">
+          package="org.subhipstercollective.coinpush">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -31,7 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ActivityMain"
+            android:name="org.subhipstercollective.coinpush.ActivityMain"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -40,9 +40,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityPreferencesConversion">
+        <activity android:name="org.subhipstercollective.coinpush.ActivityPreferencesConversion">
         </activity>
-        <activity android:name=".ActivityPreferencesGlobal">
+        <activity android:name="org.subhipstercollective.coinpush.ActivityPreferencesGlobal">
         </activity>
         <!--<service
             android:name=".MyFirebaseMessagingService">
@@ -51,7 +51,7 @@
             </intent-filter>
         </service>-->
         <service
-            android:name=".CoinPushFirebaseInstanceIDService">
+            android:name="org.subhipstercollective.coinpush.CoinPushFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

@@ -17,7 +17,7 @@
  * along with CoinPush-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.mqduck.coinpush;
+package org.subhipstercollective.coinpush;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

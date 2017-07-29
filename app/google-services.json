@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1055898783738:android:39be14098202c5f1",
         "android_client_info": {
-          "package_name": "net.mqduck.coinpush"
+          "package_name": "org.subhipstercollective.coinpush"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "1055898783738-4ij9fiqcibpfehv730ohms24oklkek5i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "net.mqduck.coinpush",
+            "package_name": "org.subhipstercollective.coinpush",
             "certificate_hash": "b55552eab277ae1fb9fe0e81eec05d415c28d84c"
           }
         },

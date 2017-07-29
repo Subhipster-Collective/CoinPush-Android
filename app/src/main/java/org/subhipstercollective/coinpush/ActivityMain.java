@@ -17,7 +17,7 @@
  * along with CoinPush-Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.mqduck.coinpush;
+package org.subhipstercollective.coinpush;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -151,7 +151,8 @@ public class ActivityMain extends AppCompatActivity
                     {
                         user = auth.getCurrentUser();
                         databaseReferenceChild = database.getReference("users/" + user.getUid());
-                        databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken().split("\"")[3]);
+                        //Log.d("foo", FirebaseInstanceId.getInstance().getToken());
+                        databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
                     }
                     else
                     {
@@ -163,7 +164,7 @@ public class ActivityMain extends AppCompatActivity
         else
         {
             databaseReferenceChild = database.getReference("users").child(user.getUid());
-            databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken().split("\"")[3]);
+            databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
         }
         
         conversions.addListeners();
