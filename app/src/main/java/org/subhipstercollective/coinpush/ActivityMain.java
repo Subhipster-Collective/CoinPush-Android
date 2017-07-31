@@ -76,11 +76,12 @@ public class ActivityMain extends AppCompatActivity
     static FirebaseDatabase database;
     static DatabaseReference databaseReferenceConversionData;
     static DatabaseReference databaseReferenceConversionDataTimestamp;
-    static DatabaseReference databaseReferenceChild;
+    static DatabaseReference databaseReferenceUser;
     
     private Toolbar toolbar;
     private ListView list;
     private FrameLayout adFrameMain;
+    private Boolean preferencesSynced = false;
     
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -144,9 +145,9 @@ public class ActivityMain extends AppCompatActivity
                     if(task.isSuccessful())
                     {
                         user = auth.getCurrentUser();
-                        databaseReferenceChild = database.getReference("users/" + user.getUid());
-                        //Log.d("foo", FirebaseInstanceId.getInstance().getToken());
-                        databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
+                        databaseReferenceUser = database.getReference("users/" + user.getUid());
+                        databaseReferenceUser.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
+                        syncPreferences();
                     }
                     else
                     {
@@ -157,8 +158,9 @@ public class ActivityMain extends AppCompatActivity
         }
         else
         {
-            databaseReferenceChild = database.getReference("users").child(user.getUid());
-            databaseReferenceChild.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
+            databaseReferenceUser = database.getReference("users").child(user.getUid());
+            databaseReferenceUser.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
+            syncPreferences();
         }
         
         conversions.addListeners();
@@ -259,5 +261,28 @@ public class ActivityMain extends AppCompatActivity
         adFrameMain.removeView(adViewMain);
         adViewMain = null;
         adViewPrefsConversion = null;
+    }
+    
+    void syncPreferences()
+    {
+        if(preferencesSynced)
+            return;
+        databaseReferenceUser.child("conversionPrefs").removeValue();
+        DatabaseReference databaseReferenceConvernversionPrefs
+                = databaseReferenceUser.child("conversionPrefs");
+        for(Conversion conversion : conversions)
+        {
+            DatabaseReference preference
+                    = databaseReferenceConvernversionPrefs.child(conversion.getKeyString());
+            String keyIncreased = getString(R.string.key_preference_push_enabled_increased) + conversion.getKeyString();
+            String keyDecreased = getString(R.string.key_preference_push_enabled_decreased) + conversion.getKeyString();
+            String keyThresholdIncreased = getString(R.string.key_preference_push_threshold_increase) + conversion.getKeyString();
+            String keyThresholdDecreased = getString(R.string.key_preference_push_threshold_decrease) + conversion.getKeyString();
+            preference.child("pushIncreased").setValue(preferences.getBoolean(keyIncreased, false));
+            preference.child("pushDecreased").setValue(preferences.getBoolean(keyDecreased, false));
+            preference.child("thresholdIncreased").setValue(preferences.getFloat(keyThresholdIncreased, 30.0f));
+            preference.child("thresholdDecreased").setValue(preferences.getFloat(keyThresholdDecreased, 30.0f));
+        }
+        preferencesSynced = true;
     }
 }

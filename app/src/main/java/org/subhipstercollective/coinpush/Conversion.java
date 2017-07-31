@@ -26,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 class Conversion
 {
     final Currency currencyFrom, currencyTo;
+    private Double value = 0.0, change = 0.0;
+    private boolean dataUninitialized = true;
     private ValueEventListener eventListener = new ValueEventListener() {
         @Override public void onDataChange(DataSnapshot dataSnapshot)
         {
@@ -39,8 +41,6 @@ class Conversion
         }
         @Override public void onCancelled(DatabaseError databaseError) {}
     };
-    private Double value = 0.0, change = 0.0;
-    private boolean dataUninitialized = true;
     
     Conversion(final Currency currencyFrom, final Currency currencyTo)
     {
@@ -85,4 +85,6 @@ class Conversion
     {
         return currencyFrom.code.toString() + ":" + currencyTo.code.toString();
     }
+    
+    
 }

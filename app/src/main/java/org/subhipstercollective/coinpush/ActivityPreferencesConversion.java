@@ -89,14 +89,18 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 .conversions
                 .get(getIntent().getIntExtra(getString(R.string.key_intent_conversions_index), -1));
     
-        final DatabaseReference dbReference = ActivityMain
-                .databaseReferenceChild
-                .child("conversions")
+        final DatabaseReference conversionPrefs = ActivityMain
+                .databaseReferenceUser
+                .child("conversionPrefs")
+                .child(conversion.getKeyString());
+        final DatabaseReference timeLastPushed = ActivityMain
+                .databaseReferenceUser
+                .child("timeLastPushed")
                 .child(conversion.getKeyString());
         
         boolean pushIncreasedEnabled, pushDecreasedEnabled;
-        pushIncreasedEnabled = getPrefBool(conversion, R.string.key_preference_push_enabled_increase);
-        pushDecreasedEnabled = getPrefBool(conversion, R.string.key_preference_push_enabled_decrease);
+        pushIncreasedEnabled = getPrefBool(conversion, R.string.key_preference_push_enabled_increased);
+        pushDecreasedEnabled = getPrefBool(conversion, R.string.key_preference_push_enabled_decreased);
         editTextIncreased.setEnabled(pushIncreasedEnabled);
         checkBoxIncreased.setChecked(pushIncreasedEnabled);
         editTextDecreased.setEnabled(pushDecreasedEnabled);
@@ -152,18 +156,18 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 verifyPushSetting(editTextIncreased, checkBoxIncreased);
                 verifyPushSetting(editTextDecreased, checkBoxDecreased);
     
-                dbReference.child("thresholdIncreased").setValue(Double.valueOf(editTextIncreased.getText().toString()));
-                dbReference.child("thresholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
-                dbReference.child("pushIncreased").setValue(checkBoxIncreased.isChecked());
-                dbReference.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
-                dbReference.child("timeLastPushed").setValue(0);
+                conversionPrefs.child("thresholdIncreased").setValue(Double.valueOf(editTextIncreased.getText().toString()));
+                conversionPrefs.child("thresholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
+                conversionPrefs.child("pushIncreased").setValue(checkBoxIncreased.isChecked());
+                conversionPrefs.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
+                timeLastPushed.setValue(0);
                 
                 setPrefFloat(conversion, R.string.key_preference_push_threshold_increase,
                              editTextIncreased.getText().toString());
                 setPrefFloat(conversion, R.string.key_preference_push_threshold_decrease,
                              editTextDecreased.getText().toString());
-                setPrefBool(conversion, R.string.key_preference_push_enabled_increase, checkBoxIncreased.isChecked());
-                setPrefBool(conversion, R.string.key_preference_push_enabled_decrease, checkBoxDecreased.isChecked());
+                setPrefBool(conversion, R.string.key_preference_push_enabled_increased, checkBoxIncreased.isChecked());
+                setPrefBool(conversion, R.string.key_preference_push_enabled_decreased, checkBoxDecreased.isChecked());
                 ActivityMain.preferencesEditor.commit();
                 
                 finish();
@@ -175,15 +179,15 @@ public class ActivityPreferencesConversion extends AppCompatActivity
             {
                 removePref(conversion, R.string.key_preference_push_threshold_increase);
                 removePref(conversion, R.string.key_preference_push_threshold_decrease);
-                removePref(conversion, R.string.key_preference_push_enabled_increase);
-                removePref(conversion, R.string.key_preference_push_enabled_decrease);
+                removePref(conversion, R.string.key_preference_push_enabled_increased);
+                removePref(conversion, R.string.key_preference_push_enabled_decreased);
                 ActivityMain.conversions.remove(conversion);
                 ActivityMain.conversionAdapter.notifyDataSetChanged();
                 ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
                                                          ActivityMain.conversions.getConverionsString());
                 ActivityMain.preferencesEditor.commit();
                 
-                dbReference.removeValue();
+                conversionPrefs.removeValue();
                 
                 finish();
             }
