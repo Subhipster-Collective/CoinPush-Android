@@ -267,13 +267,14 @@ public class ActivityMain extends AppCompatActivity
         DatabaseReference databaseReferenceConvernversionPrefs = databaseReferenceUser.child("conversionPrefs");
         for(Conversion conversion : conversions)
         {
-            databaseReferenceConvernversionPrefs.child("pushIncreased")
+            DatabaseReference prefs = databaseReferenceConvernversionPrefs.child(conversion.getKeyString());
+            prefs.child("pushIncreased")
                 .setValue(preferences.getBoolean(conversion, R.string.key_preference_push_enabled_increased));
-            databaseReferenceConvernversionPrefs.child("pushDecreased")
+            prefs.child("pushDecreased")
                 .setValue(preferences.getBoolean(conversion, R.string.key_preference_push_enabled_decreased));
-            databaseReferenceConvernversionPrefs.child("thresholdIncreased")
+            prefs.child("thresholdIncreased")
                 .setValue(preferences.getFloat(conversion, R.string.key_preference_push_threshold_increase));
-            databaseReferenceConvernversionPrefs.child("thresholdDecreased")
+            prefs.child("thresholdDecreased")
                 .setValue(preferences.getFloat(conversion, R.string.key_preference_push_threshold_decrease));
         }
         preferencesSynced = true;
