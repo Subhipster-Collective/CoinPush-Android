@@ -32,7 +32,6 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,8 +49,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 public class ActivityMain extends AppCompatActivity
 {
     private final static String APP_ID = "ca-app-pub-9926113995373020~9860570594";
-    private final static String AD_UNIT_ID_MAIN = "ca-app-pub-9926113995373020/3674436196";
-    private final static String AD_UNIT_ID_CONVERSION = "ca-app-pub-9926113995373020/8551960990";
+    //private final static String AD_UNIT_ID_MAIN = "ca-app-pub-9926113995373020/3674436196";
+    //private final static String AD_UNIT_ID_CONVERSION = "ca-app-pub-9926113995373020/8551960990";
     
     private ValueEventListener eventListener = new ValueEventListener() {
         @Override public void onDataChange(DataSnapshot dataSnapshot)
@@ -66,7 +65,8 @@ public class ActivityMain extends AppCompatActivity
     static float emojiSize;
     static CoinPushPreferences preferences;
     static CoinPushPreferences.Editor preferencesEditor;
-    static AdView adViewMain, adViewPrefsConversion;
+    static AdView adViewMain;;
+    static AdRequest adRequestMain, adRequestPrefsConversion;
     static boolean mobileAdsUninitialized = true;
     static FirebaseAuth auth;
     static FirebaseUser user;
@@ -90,7 +90,7 @@ public class ActivityMain extends AppCompatActivity
         
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         list = (ListView)findViewById(R.id.list);
-        adFrameMain = (FrameLayout)findViewById(R.id.ad_frame_main);
+        adViewMain = (AdView)findViewById(R.id.ad_view_main);
         
         setSupportActionBar(toolbar);
     
@@ -232,31 +232,16 @@ public class ActivityMain extends AppCompatActivity
         {
             MobileAds.initialize(this, APP_ID);
             mobileAdsUninitialized = false;
+            adRequestMain = new AdRequest.Builder().build();
+            adRequestPrefsConversion = new AdRequest.Builder().build();
         }
-        
-        adViewMain = new AdView(this);
-        adViewMain.setAdSize(AdSize.SMART_BANNER);
-        adViewMain.setAdUnitId(AD_UNIT_ID_MAIN);
-        adViewMain.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                                                                FrameLayout.LayoutParams.WRAP_CONTENT));
-        adViewMain.loadAd(new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC").build());
-        
-        adViewPrefsConversion = new AdView(this);
-        adViewPrefsConversion.setAdSize(AdSize.SMART_BANNER);
-        adViewPrefsConversion.setAdUnitId(AD_UNIT_ID_CONVERSION);
-        adViewPrefsConversion.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                                                                           FrameLayout.LayoutParams.WRAP_CONTENT));
-        adViewPrefsConversion.loadAd(new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC")
-                                                            .build());
-        
-        adFrameMain.addView(adViewMain);
+        adViewMain.loadAd(adRequestMain);
+        adViewMain.setVisibility(View.VISIBLE);
     }
     
     void disableAds()
     {
-        adFrameMain.removeView(adViewMain);
-        adViewMain = null;
-        adViewPrefsConversion = null;
+        adViewMain.setVisibility(View.GONE);
     }
     
     void syncPreferences()

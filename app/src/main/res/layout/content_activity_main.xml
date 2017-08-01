@@ -32,16 +32,20 @@
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/ad_frame_main"
+        android:layout_above="@+id/ad_view_main"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp"/>
 
-    <FrameLayout
-        android:id="@+id/ad_frame_main"
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ad_view_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
-    </FrameLayout>
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="ca-app-pub-9926113995373020/3674436196">
+    </com.google.android.gms.ads.AdView>
 
 </RelativeLayout>

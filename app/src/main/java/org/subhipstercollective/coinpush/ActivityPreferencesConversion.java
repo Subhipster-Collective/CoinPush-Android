@@ -19,6 +19,7 @@
 
 package org.subhipstercollective.coinpush;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,9 +27,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.Locale;
@@ -42,6 +43,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     
     private TextView textConversion;
     private TextView textConversionValue;
+    private TextView textConversionChange;
     private TextView textNotifyIncreased;
     private TextView textNotifyDecreased;
     private EditText editTextIncreased;
@@ -50,6 +52,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     private Button buttonSave;
     private CheckBox checkBoxIncreased;
     private CheckBox checkBoxDecreased;
+    private AdView adView;
     
     static
     {
@@ -73,6 +76,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     
         textConversion = (TextView)findViewById(R.id.text_preferences_conversion);
         textConversionValue = (TextView)findViewById(R.id.text_preferences_conversion_value);
+        textConversionChange = (TextView)findViewById(R.id.text_preferences_conversion_change);
         textNotifyIncreased = (TextView)findViewById(R.id.text_notify_increase);
         textNotifyDecreased = (TextView)findViewById(R.id.text_notify_decrease);
         editTextIncreased = (EditText)findViewById(R.id.edit_text_increased);
@@ -81,6 +85,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         buttonSave = (Button)findViewById(R.id.button_conversion_save);
         checkBoxIncreased = (CheckBox)findViewById(R.id.check_box_increased);
         checkBoxDecreased = (CheckBox)findViewById(R.id.check_box_decreased);
+        adView = (AdView)findViewById(R.id.ad_view_preferences_conversion);
     
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
@@ -111,15 +116,32 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                                                   R.string.key_preference_push_threshold_decrease));
         
         textConversion.setText(String.format(textConversion.getTag().toString(),
-                                             conversion.currencyFrom.code,
-                                             conversion.currencyTo.code));
+                conversion.currencyFrom.code,
+                conversion.currencyTo.code));
         textConversionValue.setText( String.format(textConversionValue.getTag().toString(),
-                                             conversion.currencyFrom.symbol,
-                                             conversion.currencyTo.symbol,
-                                             conversion.getValue()) );
+                conversion.currencyFrom.symbol,
+                conversion.currencyTo.symbol,
+                conversion.getValue()) );
+        
+        /*textConversionChange.setText( String.format(textConversionChange.getTag().toString(),
+                conversion.getChange() > 0 ? "Up" : "Down",
+                conversion.getChange()) );*/
+        double change = conversion.getChange();
+        if(change < 0)
+        {
+            int red = (int)Math.round(-change * ConversionAdapter.COLOR_SCALE);
+            textConversionChange.setTextColor(Color.rgb(red > 255 ? 255 : red, 0, 0));
+        }
+        else
+        {
+            int green = (int)Math.round(change * ConversionAdapter.COLOR_SCALE);
+            textConversionChange.setTextColor(Color.rgb(0, green > 255 ? 255 : green, 0));
+        }
+        textConversionChange.setText( String.format(textConversionChange.getTag().toString(), change) );
+        
         textNotifyIncreased.setText(String.format(formatStrIncrease, conversion.currencyFrom.code));
         textNotifyDecreased.setText(String.format(formatStrDecrease, conversion.currencyFrom.code));
-        
+    
         editTextIncreased.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override public void onFocusChange(View view, boolean hasFocus)
             {
@@ -191,20 +213,47 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         });
     }
     
+    private void loadAd()
+    {
+        if(adView.getVisibility() == View.GONE)
+        {
+            adView.loadAd(ActivityMain.adRequestPrefsConversion);
+            adView.setVisibility(View.VISIBLE);
+        }
+    }
+    
+    private void hideAd()
+    {
+        adView.setVisibility(View.GONE);
+    }
+    
     @Override
     protected void onResume()
     {
         super.onResume();
         if(ActivityMain.preferences.getBoolean(getString(R.string.key_preference_ads), false))
-            ((FrameLayout)findViewById(R.id.ad_frame_preferences_conversion))
-                    .addView(ActivityMain.adViewPrefsConversion);
+            loadAd();
+        else
+            hideAd();
     }
     
     @Override
     protected void onStop()
     {
         super.onStop();
-        ((FrameLayout)findViewById(R.id.ad_frame_preferences_conversion)).removeAllViews();
+        hideAd();
+    }
+    
+    @Override
+    public void onWindowFocusChanged (boolean hasFocus)
+    {
+        int[] buttonRemovePos = new int[2];
+        int[] adViewPos = new int[2];
+        buttonRemove.getLocationInWindow(buttonRemovePos);
+        adView.getLocationInWindow(adViewPos);
+        
+        if(buttonRemovePos[1] + buttonRemove.getHeight() > adViewPos[1])
+            hideAd();
     }
     
     void verifyPushSetting(final EditText editText, final CheckBox checkBox)
