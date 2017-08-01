@@ -19,11 +19,8 @@
 
 package org.subhipstercollective.coinpush;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -67,8 +64,8 @@ public class ActivityMain extends AppCompatActivity
     static ConversionList conversions;// = new ConversionList();
     static ConversionAdapter conversionAdapter;
     static float emojiSize;
-    static SharedPreferences preferences;
-    static SharedPreferences.Editor preferencesEditor;
+    static CoinPushPreferences preferences;
+    static CoinPushPreferences.Editor preferencesEditor;
     static AdView adViewMain, adViewPrefsConversion;
     static boolean mobileAdsUninitialized = true;
     static FirebaseAuth auth;
@@ -83,7 +80,6 @@ public class ActivityMain extends AppCompatActivity
     private FrameLayout adFrameMain;
     private Boolean preferencesSynced = false;
     
-    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -98,7 +94,7 @@ public class ActivityMain extends AppCompatActivity
         
         setSupportActionBar(toolbar);
     
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences = new CoinPushPreferences(this);
         preferencesEditor = preferences.edit();
         
         auth = FirebaseAuth.getInstance();
@@ -268,20 +264,17 @@ public class ActivityMain extends AppCompatActivity
         if(preferencesSynced)
             return;
         databaseReferenceUser.child("conversionPrefs").removeValue();
-        DatabaseReference databaseReferenceConvernversionPrefs
-                = databaseReferenceUser.child("conversionPrefs");
+        DatabaseReference databaseReferenceConvernversionPrefs = databaseReferenceUser.child("conversionPrefs");
         for(Conversion conversion : conversions)
         {
-            DatabaseReference preference
-                    = databaseReferenceConvernversionPrefs.child(conversion.getKeyString());
-            String keyIncreased = getString(R.string.key_preference_push_enabled_increased) + conversion.getKeyString();
-            String keyDecreased = getString(R.string.key_preference_push_enabled_decreased) + conversion.getKeyString();
-            String keyThresholdIncreased = getString(R.string.key_preference_push_threshold_increase) + conversion.getKeyString();
-            String keyThresholdDecreased = getString(R.string.key_preference_push_threshold_decrease) + conversion.getKeyString();
-            preference.child("pushIncreased").setValue(preferences.getBoolean(keyIncreased, false));
-            preference.child("pushDecreased").setValue(preferences.getBoolean(keyDecreased, false));
-            preference.child("thresholdIncreased").setValue(preferences.getFloat(keyThresholdIncreased, 30.0f));
-            preference.child("thresholdDecreased").setValue(preferences.getFloat(keyThresholdDecreased, 30.0f));
+            databaseReferenceConvernversionPrefs.child("pushIncreased")
+                .setValue(preferences.getBoolean(conversion, R.string.key_preference_push_enabled_increased));
+            databaseReferenceConvernversionPrefs.child("pushDecreased")
+                .setValue(preferences.getBoolean(conversion, R.string.key_preference_push_enabled_decreased));
+            databaseReferenceConvernversionPrefs.child("thresholdIncreased")
+                .setValue(preferences.getFloat(conversion, R.string.key_preference_push_threshold_increase));
+            databaseReferenceConvernversionPrefs.child("thresholdDecreased")
+                .setValue(preferences.getFloat(conversion, R.string.key_preference_push_threshold_decrease));
         }
         preferencesSynced = true;
     }
