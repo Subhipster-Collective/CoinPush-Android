@@ -19,12 +19,16 @@
 
 package org.subhipstercollective.coinpush;
 
+import android.graphics.Color;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 class Conversion
 {
+    final static double COLOR_SCALE = 255.0 / 30.0;
+    
     final Currency currencyFrom, currencyTo;
     private Double value = 0.0, change = 0.0;
     private boolean dataUninitialized = true;
@@ -86,5 +90,17 @@ class Conversion
         return currencyFrom.code.toString() + ":" + currencyTo.code.toString();
     }
     
-    
+    int getChangeColor()
+    {
+        if(change < 0)
+        {
+            int red = (int)Math.round(-change * COLOR_SCALE);
+            return Color.rgb(red > 255 ? 255 : red, 0, 0);
+        }
+        else
+        {
+            int green = (int)Math.round(change * COLOR_SCALE);
+            return Color.rgb(0, green > 255 ? 255 : green, 0);
+        }
+    }
 }

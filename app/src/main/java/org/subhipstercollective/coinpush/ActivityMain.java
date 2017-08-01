@@ -232,8 +232,8 @@ public class ActivityMain extends AppCompatActivity
         {
             MobileAds.initialize(this, APP_ID);
             mobileAdsUninitialized = false;
-            adRequestMain = new AdRequest.Builder().build();
-            adRequestPrefsConversion = new AdRequest.Builder().build();
+            adRequestMain = new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC").build();
+            adRequestPrefsConversion = new AdRequest.Builder().addTestDevice("B3AAAD21FB73238814182BF44E0B18FC").build();
         }
         adViewMain.loadAd(adRequestMain);
         adViewMain.setVisibility(View.VISIBLE);

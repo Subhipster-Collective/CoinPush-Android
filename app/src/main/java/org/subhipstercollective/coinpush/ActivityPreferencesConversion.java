@@ -19,7 +19,6 @@
 
 package org.subhipstercollective.coinpush;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -97,10 +96,6 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 .databaseReferenceUser
                 .child("conversionPrefs")
                 .child(conversion.getKeyString());
-        final DatabaseReference timeLastPushed = ActivityMain
-                .databaseReferenceUser
-                .child("timeLastPushed")
-                .child(conversion.getKeyString());
         
         boolean pushIncreasedEnabled, pushDecreasedEnabled;
         pushIncreasedEnabled = ActivityMain.preferences.getBoolean(conversion, R.string.key_preference_push_enabled_increased);
@@ -126,21 +121,14 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         /*textConversionChange.setText( String.format(textConversionChange.getTag().toString(),
                 conversion.getChange() > 0 ? "Up" : "Down",
                 conversion.getChange()) );*/
-        double change = conversion.getChange();
-        if(change < 0)
-        {
-            int red = (int)Math.round(-change * ConversionAdapter.COLOR_SCALE);
-            textConversionChange.setTextColor(Color.rgb(red > 255 ? 255 : red, 0, 0));
-        }
-        else
-        {
-            int green = (int)Math.round(change * ConversionAdapter.COLOR_SCALE);
-            textConversionChange.setTextColor(Color.rgb(0, green > 255 ? 255 : green, 0));
-        }
-        textConversionChange.setText( String.format(textConversionChange.getTag().toString(), change) );
+        textConversionChange.setTextColor(conversion.getChangeColor());
+        textConversionChange.setText( String.format(textConversionChange.getTag().toString(), conversion.getChange()) );
         
         textNotifyIncreased.setText(String.format(formatStrIncrease, conversion.currencyFrom.code));
         textNotifyDecreased.setText(String.format(formatStrDecrease, conversion.currencyFrom.code));
+    
+        if(ActivityMain.preferences.getBoolean(getString(R.string.key_preference_ads), false))
+            loadAd();
     
         editTextIncreased.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override public void onFocusChange(View view, boolean hasFocus)
@@ -179,7 +167,6 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 conversionPrefs.child("thresholdDecreased").setValue(Double.valueOf(editTextDecreased.getText().toString()));
                 conversionPrefs.child("pushIncreased").setValue(checkBoxIncreased.isChecked());
                 conversionPrefs.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
-                timeLastPushed.setValue(0);
     
                 ActivityMain.preferencesEditor.putFloat(conversion, R.string.key_preference_push_threshold_increase,
                              editTextIncreased.getText().toString());
@@ -225,23 +212,6 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     private void hideAd()
     {
         adView.setVisibility(View.GONE);
-    }
-    
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        if(ActivityMain.preferences.getBoolean(getString(R.string.key_preference_ads), false))
-            loadAd();
-        else
-            hideAd();
-    }
-    
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-        hideAd();
     }
     
     @Override

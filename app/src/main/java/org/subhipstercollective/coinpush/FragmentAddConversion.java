@@ -81,8 +81,9 @@ public class FragmentAddConversion extends DialogFragment
         final Runnable setAddButtonEnabled = new Runnable() {
             @Override public void run()
             {
-                boolean tf = ActivityMain.conversions.contains((Currency)spinnerFrom.getSelectedItem(),
-                                                               (Currency)spinnerTo.getSelectedItem());
+                boolean tf = spinnerFrom.getSelectedItem() == spinnerTo.getSelectedItem()
+                             || ActivityMain.conversions.contains((Currency)spinnerFrom.getSelectedItem(),
+                                                                  (Currency)spinnerTo.getSelectedItem());
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!tf);
             }
         };
