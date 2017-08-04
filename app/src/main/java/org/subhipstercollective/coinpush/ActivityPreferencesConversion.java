@@ -110,19 +110,17 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         editTextDecreased.setText(ActivityMain.preferences.getFloatStr(conversion,
                                                   R.string.key_preference_push_threshold_decrease));
         
-        textConversion.setText(String.format(textConversion.getTag().toString(),
+        textConversion.setText(String.format(getString(R.string.text_preferences_conversion),
                 conversion.currencyFrom.code,
                 conversion.currencyTo.code));
-        textConversionValue.setText( String.format(textConversionValue.getTag().toString(),
+        textConversionValue.setText( String.format(getString(R.string.text_preferences_conversion_value),
                 conversion.currencyFrom.symbol,
                 conversion.currencyTo.symbol,
                 conversion.getValue()) );
         
-        /*textConversionChange.setText( String.format(textConversionChange.getTag().toString(),
-                conversion.getChange() > 0 ? "Up" : "Down",
-                conversion.getChange()) );*/
         textConversionChange.setTextColor(conversion.getChangeColor());
-        textConversionChange.setText( String.format(textConversionChange.getTag().toString(), conversion.getChange()) );
+        textConversionChange.setText( String.format(getString(R.string.text_preferences_conversion_change),
+                conversion.getChange()) );
         
         textNotifyIncreased.setText(String.format(formatStrIncrease, conversion.currencyFrom.code));
         textNotifyDecreased.setText(String.format(formatStrDecrease, conversion.currencyFrom.code));
@@ -169,11 +167,13 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 conversionPrefs.child("pushDecreased").setValue(checkBoxDecreased.isChecked());
     
                 ActivityMain.preferencesEditor.putFloat(conversion, R.string.key_preference_push_threshold_increase,
-                             editTextIncreased.getText().toString());
+                        editTextIncreased.getText().toString());
                 ActivityMain.preferencesEditor.putFloat(conversion, R.string.key_preference_push_threshold_decrease,
-                             editTextDecreased.getText().toString());
-                ActivityMain.preferencesEditor.putBoolean(conversion, R.string.key_preference_push_enabled_increased, checkBoxIncreased.isChecked());
-                ActivityMain.preferencesEditor.putBoolean(conversion, R.string.key_preference_push_enabled_decreased, checkBoxDecreased.isChecked());
+                        editTextDecreased.getText().toString());
+                ActivityMain.preferencesEditor.putBoolean(conversion, R.string.key_preference_push_enabled_increased,
+                        checkBoxIncreased.isChecked());
+                ActivityMain.preferencesEditor.putBoolean(conversion, R.string.key_preference_push_enabled_decreased,
+                        checkBoxDecreased.isChecked());
                 ActivityMain.preferencesEditor.commit();
                 
                 finish();
@@ -190,7 +190,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 ActivityMain.conversions.remove(conversion);
                 ActivityMain.conversionAdapter.notifyDataSetChanged();
                 ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
-                                                         ActivityMain.conversions.getConverionsString());
+                        ActivityMain.conversions.getConverionsString());
                 ActivityMain.preferencesEditor.commit();
                 
                 conversionPrefs.removeValue();

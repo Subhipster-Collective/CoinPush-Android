@@ -47,7 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:tag="%s to %s"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 tools:text="ETH to USD"/>
@@ -57,7 +56,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:tag="%s1 = %s%.3f"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 tools:text="Ξ1 = $100.000"/>
@@ -66,7 +64,6 @@
                 android:id="@+id/text_preferences_conversion_change"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="%+.4f%% over the last 24 hours"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 tools:text="Up 30.0000% in the last 24 hours"/>
@@ -77,11 +74,11 @@
                 android:layout_weight="0.15"/>
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/text_push_notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Push Notifications"
+                android:text="@string/text_push_notifications"
                 android:textAlignment="center"/>
 
             <LinearLayout
