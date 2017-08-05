@@ -30,7 +30,7 @@ class Currency
     enum Code
     {
         ETH("ETH"), BTC("BTC"), LTC("LTC"), DASH("DASH"), XMR("XMR"), NXT("NXT"), ZEC("ZEC"), DGB("DGB"), XRP("XRP"),
-        ETC("ETC"),
+        ETC("ETC"), BCH("BCH"), DOGE("DOGE"),
         USD("USD"), EUR("EUR"), GBP("GBP"), JPY("JPY"), CNY("CNY"), AUD("AUD"), CAD("CAD"), CHF("CHF"), ;
         private final String code;
         Code(String code) { this.code = code; }
@@ -48,40 +48,44 @@ class Currency
     
     static
     {
-        currencies = new HashMap<>();
-        currencies.put(Code.ETH, new Currency(Code.ETH, "Ethereum", "Ξ", R.mipmap.ic_eth));
-        currencies.put(Code.BTC, new Currency(Code.BTC, "Bitcoin",
-                                              android.os.Build.VERSION.SDK_INT < 26 ? "Ƀ" : "\u20BF",
-                                              R.mipmap.ic_btc));
-        currencies.put(Code.LTC, new Currency(Code.LTC, "Litecoin", "Ł", R.mipmap.ic_ltc));
-        currencies.put(Code.DASH, new Currency(Code.DASH, "DigitalCash", "DASH", R.mipmap.ic_dash));
-        currencies.put(Code.XMR, new Currency(Code.XMR, "Monero", "ɱ", R.mipmap.ic_xmr));
-        currencies.put(Code.NXT, new Currency(Code.NXT, "Nxt", "NXT", R.mipmap.ic_nxt));
-        currencies.put(Code.ZEC, new Currency(Code.ZEC, "ZCash", "ZEC", R.mipmap.ic_zec));
-        currencies.put(Code.DGB, new Currency(Code.DGB, "DigiByte", "", R.mipmap.ic_dgb));
-        currencies.put(Code.XRP, new Currency(Code.XRP, "Ripple", "", R.mipmap.ic_xrp));
-        currencies.put(Code.ETC, new Currency(Code.ETC, "Ethereum Classic", "", R.mipmap.ic_etc));
+        String bitcoinSymbol = android.os.Build.VERSION.SDK_INT < 26 ? "Ƀ" : "\u20BF";
         
-        currencies.put(Code.USD, new Currency(Code.USD, "US Dollar", "$", "\uD83C\uDDFA\uD83C\uDDF8"));
-        currencies.put(Code.EUR, new Currency(Code.EUR, "Euro", "€", "\uD83C\uDDEA\uD83C\uDDFA"));
-        currencies.put(Code.JPY, new Currency(Code.JPY, "Japanese Yen", "¥", "\uD83C\uDDEF\uD83C\uDDF5"));
-        currencies.put(Code.GBP, new Currency(Code.GBP, "Pound Sterling", "£", "\uD83C\uDDEC\uD83C\uDDE7"));
-        currencies.put(Code.CNY, new Currency(Code.CNY, "Chinese Yuan", "¥", "\uD83C\uDDE8\uD83C\uDDF3"));
-        currencies.put(Code.AUD, new Currency(Code.AUD, "Australian Dollar", "$", "\uD83C\uDDE6\uD83C\uDDFA"));
-        currencies.put(Code.CAD, new Currency(Code.CAD, "Canadian Dollar", "$", "\uD83C\uDDE8\uD83C\uDDE6"));
-        currencies.put(Code.CHF, new Currency(Code.CHF, "Swiss Franc", "Fr", "\uD83C\uDDE8\uD83C\uDDED"));
+        currencies = new HashMap<>();
+        currencies.put(Code.ETH,  new Currency(Code.ETH,  "Ethereum", "Ξ", R.mipmap.ic_eth));
+        currencies.put(Code.BTC,  new Currency(Code.BTC,  "Bitcoin", bitcoinSymbol, R.mipmap.ic_btc));
+        currencies.put(Code.LTC,  new Currency(Code.LTC,  "Litecoin", "Ł", R.mipmap.ic_ltc));
+        currencies.put(Code.DASH, new Currency(Code.DASH, "DigitalCash", "DASH", R.mipmap.ic_dash));
+        currencies.put(Code.XMR,  new Currency(Code.XMR,  "Monero", "ɱ", R.mipmap.ic_xmr));
+        currencies.put(Code.NXT,  new Currency(Code.NXT,  "Nxt", "NXT", R.mipmap.ic_nxt));
+        currencies.put(Code.ZEC,  new Currency(Code.ZEC,  "ZCash", "ZEC", R.mipmap.ic_zec));
+        currencies.put(Code.DGB,  new Currency(Code.DGB,  "DigiByte", "", R.mipmap.ic_dgb));
+        currencies.put(Code.XRP,  new Currency(Code.XRP,  "Ripple", "", R.mipmap.ic_xrp));
+        currencies.put(Code.BCH,  new Currency(Code.BCH,  "Bitcoin Cash", bitcoinSymbol, R.mipmap.ic_bch));
+        currencies.put(Code.ETC,  new Currency(Code.ETC,  "Ethereum Classic", "", R.mipmap.ic_etc));
+        currencies.put(Code.DOGE, new Currency(Code.DOGE, "Dogecoin", "Ð", R.mipmap.ic_doge));
+        
+        currencies.put(Code.USD,  new Currency(Code.USD,  "US Dollar", "$", "\uD83C\uDDFA\uD83C\uDDF8"));
+        currencies.put(Code.EUR,  new Currency(Code.EUR,  "Euro", "€", "\uD83C\uDDEA\uD83C\uDDFA"));
+        currencies.put(Code.JPY,  new Currency(Code.JPY,  "Japanese Yen", "¥", "\uD83C\uDDEF\uD83C\uDDF5"));
+        currencies.put(Code.GBP,  new Currency(Code.GBP,  "Pound Sterling", "£", "\uD83C\uDDEC\uD83C\uDDE7"));
+        currencies.put(Code.CNY,  new Currency(Code.CNY,  "Chinese Yuan", "¥", "\uD83C\uDDE8\uD83C\uDDF3"));
+        currencies.put(Code.AUD,  new Currency(Code.AUD,  "Australian Dollar", "$", "\uD83C\uDDE6\uD83C\uDDFA"));
+        currencies.put(Code.CAD,  new Currency(Code.CAD,  "Canadian Dollar", "$", "\uD83C\uDDE8\uD83C\uDDE6"));
+        currencies.put(Code.CHF,  new Currency(Code.CHF,  "Swiss Franc", "Fr", "\uD83C\uDDE8\uD83C\uDDED"));
         
         currencyListFrom = new ArrayList<>();
         currencyListFrom.add(currencies.get(Code.BTC));
         currencyListFrom.add(currencies.get(Code.ETH));
+        currencyListFrom.add(currencies.get(Code.BCH));
         currencyListFrom.add(currencies.get(Code.LTC));
+        currencyListFrom.add(currencies.get(Code.ETC));
         currencyListFrom.add(currencies.get(Code.DASH));
         currencyListFrom.add(currencies.get(Code.XMR));
-        currencyListFrom.add(currencies.get(Code.NXT));
         currencyListFrom.add(currencies.get(Code.ZEC));
+        currencyListFrom.add(currencies.get(Code.DOGE));
+        currencyListFrom.add(currencies.get(Code.NXT));
         currencyListFrom.add(currencies.get(Code.DGB));
         currencyListFrom.add(currencies.get(Code.XRP));
-        currencyListFrom.add(currencies.get(Code.ETC));
         
         currencyListTo = new ArrayList<>();
         currencyListTo.add(currencies.get(Code.USD));

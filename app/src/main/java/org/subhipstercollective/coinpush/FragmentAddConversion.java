@@ -38,8 +38,8 @@ public class FragmentAddConversion extends DialogFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_conversion, null);
     
-        final CurrencyAdapter adapterFrom = new CurrencyAdapter(getActivity(), Currency.currencyListFrom);
-        final CurrencyAdapter adapterTo = new CurrencyAdapter(getActivity(), Currency.currencyListTo);
+        final AdapterCurrency adapterFrom = new AdapterCurrency(getActivity(), Currency.currencyListFrom);
+        final AdapterCurrency adapterTo = new AdapterCurrency(getActivity(), Currency.currencyListTo);
         final Spinner spinnerFrom = (Spinner)view.findViewById(R.id.spinner_currency_from);
         final Spinner spinnerTo = (Spinner)view.findViewById(R.id.spinner_currency_to);
         

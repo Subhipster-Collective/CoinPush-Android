@@ -39,7 +39,7 @@ class Conversion
             change = Double.valueOf(dataSnapshot.child("CHANGEPCT24HOUR").getValue().toString());
             if(dataUninitialized)
             {
-                ActivityMain.conversionAdapter.notifyDataSetChanged();
+                ActivityMain.adapterConversion.notifyDataSetChanged();
                 dataUninitialized = false;
             }
         }

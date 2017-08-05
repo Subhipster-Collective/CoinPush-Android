@@ -55,13 +55,13 @@ public class ActivityMain extends AppCompatActivity
     private ValueEventListener eventListener = new ValueEventListener() {
         @Override public void onDataChange(DataSnapshot dataSnapshot)
         {
-            conversionAdapter.notifyDataSetChanged(); // Add code to skip this call on first run?
+            adapterConversion.notifyDataSetChanged(); // Add code to skip this call on first run?
         }
         @Override public void onCancelled(DatabaseError databaseError) {}
     };
     
     static ConversionList conversions;// = new ConversionList();
-    static ConversionAdapter conversionAdapter;
+    static AdapterConversion adapterConversion;
     static float emojiSize;
     static CoinPushPreferences preferences;
     static CoinPushPreferences.Editor preferencesEditor;
@@ -118,8 +118,8 @@ public class ActivityMain extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        conversionAdapter = new ConversionAdapter(this, conversions);
-        list.setAdapter(conversionAdapter);
+        adapterConversion = new AdapterConversion(this, conversions);
+        list.setAdapter(adapterConversion);
     }
     
     @Override

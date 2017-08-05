@@ -188,7 +188,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 ActivityMain.preferencesEditor.remove(conversion, R.string.key_preference_push_enabled_increased);
                 ActivityMain.preferencesEditor.remove(conversion, R.string.key_preference_push_enabled_decreased);
                 ActivityMain.conversions.remove(conversion);
-                ActivityMain.conversionAdapter.notifyDataSetChanged();
+                ActivityMain.adapterConversion.notifyDataSetChanged();
                 ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
                         ActivityMain.conversions.getConverionsString());
                 ActivityMain.preferencesEditor.commit();

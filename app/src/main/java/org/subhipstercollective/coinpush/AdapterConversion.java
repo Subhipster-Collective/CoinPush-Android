@@ -33,13 +33,13 @@ import android.widget.TextView;
  * Created by subhipstercollective on 7/4/17.
  */
 
-class ConversionAdapter extends ArrayAdapter<Conversion>
+class AdapterConversion extends ArrayAdapter<Conversion>
 {
     //private final Context context;
     private final ConversionList conversions;
     private LayoutInflater inflater;
     
-    ConversionAdapter(final Context context, final ConversionList conversions)
+    AdapterConversion(final Context context, final ConversionList conversions)
     {
         super(context, -1, conversions);
         //this.context = context;

@@ -31,12 +31,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-class CurrencyAdapter extends ArrayAdapter<Currency>
+class AdapterCurrency extends ArrayAdapter<Currency>
 {
     private ArrayList<Currency> currencies;
     private LayoutInflater inflater;
     
-    CurrencyAdapter(final Context context, final ArrayList<Currency> currencies)
+    AdapterCurrency(final Context context, final ArrayList<Currency> currencies)
     {
         super(context, -1, currencies);
     
