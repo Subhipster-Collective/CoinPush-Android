@@ -35,7 +35,6 @@ import java.util.Locale;
 
 public class ActivityPreferencesConversion extends AppCompatActivity
 {
-    private final static float DEFAULT_THRESHOLD = 30.0f;
     private final static String FORMAT_STR_INCREASE_BASE = "When %s has increased by";
     private final static String FORMAT_STR_DECREASE_BASE = "When %s has decreased by";
     private final static String formatStrIncrease, formatStrDecrease;
@@ -230,7 +229,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     {
         if(editText.getText().toString().isEmpty() || Float.valueOf(editText.getText().toString()) <= 0)
         {
-            editText.setText(String.format(Locale.getDefault(), Float.toString(DEFAULT_THRESHOLD)));
+            editText.setText(String.format(Locale.getDefault(), Float.toString(ActivityMain.DEFAULT_THRESHOLD)));
             editText.setEnabled(false);
             checkBox.setChecked(false);
         }

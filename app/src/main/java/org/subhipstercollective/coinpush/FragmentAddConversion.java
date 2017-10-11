@@ -29,6 +29,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.google.firebase.database.DatabaseReference;
+
 public class FragmentAddConversion extends DialogFragment
 {
     @Override
@@ -71,6 +73,13 @@ public class FragmentAddConversion extends DialogFragment
                                 .putInt(getString(R.string.key_preference_add_conversion_default_to),
                                         spinnerTo.getSelectedItemPosition());
                         ActivityMain.preferencesEditor.commit();
+                        
+                        DatabaseReference dbConversionPref = ActivityMain.databaseReferenceUser.child("conversionPrefs")
+                                .child(conversion.getKeyString());
+                        dbConversionPref.child("pushIncreased").setValue(false);
+                        dbConversionPref.child("pushDecreased").setValue(false);
+                        dbConversionPref.child("thresholdIncreased").setValue(ActivityMain.DEFAULT_THRESHOLD);
+                        dbConversionPref.child("thresholdDecreased").setValue(ActivityMain.DEFAULT_THRESHOLD);
                     }
                 })
                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

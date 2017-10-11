@@ -52,6 +52,8 @@ public class ActivityMain extends AppCompatActivity
     //private final static String AD_UNIT_ID_MAIN = "ca-app-pub-9926113995373020/3674436196";
     //private final static String AD_UNIT_ID_CONVERSION = "ca-app-pub-9926113995373020/8551960990";
     
+    final static float DEFAULT_THRESHOLD = 30.0f;
+    
     private ValueEventListener eventListener = new ValueEventListener() {
         @Override public void onDataChange(DataSnapshot dataSnapshot)
         {
@@ -65,7 +67,7 @@ public class ActivityMain extends AppCompatActivity
     static float emojiSize;
     static CoinPushPreferences preferences;
     static CoinPushPreferences.Editor preferencesEditor;
-    static AdView adViewMain;;
+    static AdView adViewMain;
     static AdRequest adRequestMain, adRequestPrefsConversion;
     static boolean mobileAdsUninitialized = true;
     static FirebaseAuth auth;
