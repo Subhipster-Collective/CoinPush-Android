@@ -250,6 +250,7 @@ public class ActivityMain extends AppCompatActivity
     {
         if(preferencesSynced)
             return;
+        databaseReferenceUser.child("timeLastOpened").setValue(System.currentTimeMillis());
         databaseReferenceUser.child("conversionPrefs").removeValue();
         DatabaseReference databaseReferenceConvernversionPrefs = databaseReferenceUser.child("conversionPrefs");
         for(Conversion conversion : conversions)
