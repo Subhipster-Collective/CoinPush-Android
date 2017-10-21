@@ -33,8 +33,8 @@ import java.util.ArrayList;
 
 class AdapterCurrency extends ArrayAdapter<Currency>
 {
-    private ArrayList<Currency> currencies;
-    private LayoutInflater inflater;
+    private final ArrayList<Currency> currencies;
+    private final LayoutInflater inflater;
     
     AdapterCurrency(final Context context, final ArrayList<Currency> currencies)
     {

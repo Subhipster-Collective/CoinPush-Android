@@ -41,6 +41,7 @@ public class CoinPushPreferences implements SharedPreferences
     final private SharedPreferences preferences;
     final private Context context;
     
+    @SuppressWarnings("UnusedReturnValue")
     class Editor implements SharedPreferences.Editor
     {
         final private SharedPreferences.Editor editor;
@@ -235,8 +236,8 @@ public class CoinPushPreferences implements SharedPreferences
         preferences.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
     
-    String getPrefKeyStr(final @StringRes int preferenceyKey, final Conversion conversion)
+    String getPrefKeyStr(final @StringRes int preferenceKey, final Conversion conversion)
     {
-        return context.getString(preferenceyKey) + conversion.getKeyString();
+        return context.getString(preferenceKey) + conversion.getKeyString();
     }
 }

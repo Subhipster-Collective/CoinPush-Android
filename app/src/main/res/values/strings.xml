@@ -37,4 +37,7 @@
     <string name="text_notify_increase">When %s has increased by</string>
     <string name="text_preferences_conversion_value">%s1 = %s%.3f</string>
     <string name="text_ads_opt_in">Opt in to banner ads</string>
+    <string name="text_button_remove">Remove</string>
+    <string name="text_button_save">Save</string>
+    <string name="text_notify_decrease">When %s has decreased by</string>
 </resources>

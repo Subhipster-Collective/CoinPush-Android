@@ -35,9 +35,7 @@ import java.util.Locale;
 
 public class ActivityPreferencesConversion extends AppCompatActivity
 {
-    private final static String FORMAT_STR_INCREASE_BASE = "When %s has increased by";
-    private final static String FORMAT_STR_DECREASE_BASE = "When %s has decreased by";
-    private final static String formatStrIncrease, formatStrDecrease;
+    private final static String emojiIncrease, emojiDecrease;
     
     private TextView textConversion;
     private TextView textConversionValue;
@@ -56,13 +54,13 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     {
         if(android.os.Build.VERSION.SDK_INT > 22)
         {
-            formatStrIncrease = "\uD83D\uDCC8 " + FORMAT_STR_INCREASE_BASE;
-            formatStrDecrease = "\uD83D\uDCC9 " + FORMAT_STR_DECREASE_BASE;
+            emojiIncrease = "\uD83D\uDCC8 ";
+            emojiDecrease = "\uD83D\uDCC9 ";
         }
         else
         {
-            formatStrIncrease = FORMAT_STR_INCREASE_BASE;
-            formatStrDecrease = FORMAT_STR_DECREASE_BASE;
+            emojiIncrease = "";
+            emojiDecrease = "";
         }
     }
     
@@ -121,8 +119,10 @@ public class ActivityPreferencesConversion extends AppCompatActivity
         textConversionChange.setText( String.format(getString(R.string.text_preferences_conversion_change),
                 conversion.getChange()) );
         
-        textNotifyIncreased.setText(String.format(formatStrIncrease, conversion.currencyFrom.code));
-        textNotifyDecreased.setText(String.format(formatStrDecrease, conversion.currencyFrom.code));
+        textNotifyIncreased.setText(String.format(emojiIncrease + getString(R.string.text_notify_increase),
+                conversion.currencyFrom.code));
+        textNotifyDecreased.setText(String.format(emojiDecrease + getString(R.string.text_notify_decrease),
+                conversion.currencyFrom.code));
     
         if(ActivityMain.preferences.getBoolean(getString(R.string.key_preference_ads), false))
             loadAd();
@@ -189,7 +189,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 ActivityMain.conversions.remove(conversion);
                 ActivityMain.adapterConversion.notifyDataSetChanged();
                 ActivityMain.preferencesEditor.putString(getString(R.string.key_preference_conversions),
-                        ActivityMain.conversions.getConverionsString());
+                        ActivityMain.conversions.getConversionsString());
                 ActivityMain.preferencesEditor.commit();
                 
                 conversionPrefs.removeValue();
@@ -229,7 +229,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
     {
         if(editText.getText().toString().isEmpty() || Float.valueOf(editText.getText().toString()) <= 0)
         {
-            editText.setText(String.format(Locale.getDefault(), Float.toString(ActivityMain.DEFAULT_THRESHOLD)));
+            editText.setText(String.format(Locale.getDefault(), "%f", ActivityMain.DEFAULT_THRESHOLD));
             editText.setEnabled(false);
             checkBox.setChecked(false);
         }

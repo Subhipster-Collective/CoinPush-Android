@@ -32,7 +32,7 @@ class Conversion
     final Currency currencyFrom, currencyTo;
     private Double value = 0.0, change = 0.0;
     private boolean dataUninitialized = true;
-    private ValueEventListener eventListener = new ValueEventListener() {
+    private final ValueEventListener eventListener = new ValueEventListener() {
         @Override public void onDataChange(DataSnapshot dataSnapshot)
         {
             value = Double.valueOf(dataSnapshot.child("PRICE").getValue().toString());

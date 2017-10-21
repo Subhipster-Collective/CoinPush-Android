@@ -65,7 +65,7 @@ public class FragmentAddConversion extends DialogFragment
                         
                         ActivityMain.preferencesEditor
                                 .putString(getString(R.string.key_preference_conversions),
-                                           ActivityMain.conversions.getConverionsString());
+                                           ActivityMain.conversions.getConversionsString());
                         ActivityMain.preferencesEditor
                                 .putInt(getString(R.string.key_preference_add_conversion_default_from),
                                         spinnerFrom.getSelectedItemPosition());

@@ -28,7 +28,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -54,7 +53,7 @@ public class ActivityMain extends AppCompatActivity
     
     final static float DEFAULT_THRESHOLD = 30.0f;
     
-    private ValueEventListener eventListener = new ValueEventListener() {
+    private final ValueEventListener eventListener = new ValueEventListener() {
         @Override public void onDataChange(DataSnapshot dataSnapshot)
         {
             adapterConversion.notifyDataSetChanged(); // Add code to skip this call on first run?
@@ -79,7 +78,6 @@ public class ActivityMain extends AppCompatActivity
     
     private Toolbar toolbar;
     private ListView list;
-    private FrameLayout adFrameMain;
     private Boolean preferencesSynced = false;
     
     @Override
@@ -96,7 +94,7 @@ public class ActivityMain extends AppCompatActivity
         
         setSupportActionBar(toolbar);
     
-        preferences = new CoinPushPreferences(this);
+        preferences = new CoinPushPreferences(this.getApplicationContext());
         preferencesEditor = preferences.edit();
         
         auth = FirebaseAuth.getInstance();
@@ -252,10 +250,10 @@ public class ActivityMain extends AppCompatActivity
             return;
         databaseReferenceUser.child("timeLastOpened").setValue(System.currentTimeMillis());
         databaseReferenceUser.child("conversionPrefs").removeValue();
-        DatabaseReference databaseReferenceConvernversionPrefs = databaseReferenceUser.child("conversionPrefs");
+        DatabaseReference databaseReferenceConversionPrefs = databaseReferenceUser.child("conversionPrefs");
         for(Conversion conversion : conversions)
         {
-            DatabaseReference prefs = databaseReferenceConvernversionPrefs.child(conversion.getKeyString());
+            DatabaseReference prefs = databaseReferenceConversionPrefs.child(conversion.getKeyString());
             prefs.child("pushIncreased")
                 .setValue(preferences.getBoolean(conversion, R.string.key_preference_push_enabled_increased));
             prefs.child("pushDecreased")

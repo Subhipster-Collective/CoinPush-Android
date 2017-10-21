@@ -37,7 +37,7 @@ class AdapterConversion extends ArrayAdapter<Conversion>
 {
     //private final Context context;
     private final ConversionList conversions;
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
     
     AdapterConversion(final Context context, final ConversionList conversions)
     {
@@ -69,6 +69,4 @@ class AdapterConversion extends ArrayAdapter<Conversion>
         
         return conversionView;
     }
-    
-    ConversionList getConversions() { return conversions; }
 }

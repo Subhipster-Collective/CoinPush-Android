@@ -42,15 +42,16 @@ class ConversionList extends ArrayList<Conversion>
             }
     }
     
-    String getConverionsString()
+    String getConversionsString()
     {
-        String conversionString = "";
+        StringBuilder conversionsString = new StringBuilder();
         for(Conversion conversion : this)
-            conversionString += conversion.currencyFrom.code.toString()
-                                + DELIMITER_CURRENCY
-                                + conversion.currencyTo.code.toString()
-                                + DELIMITER_CONVERSION;
-        return conversionString;
+            conversionsString
+                    .append(conversion.currencyFrom.code.toString())
+                    .append(DELIMITER_CURRENCY)
+                    .append(conversion.currencyTo.code.toString())
+                    .append(DELIMITER_CONVERSION);
+        return conversionsString.toString();
     }
     
     public boolean add(Conversion conversion)
