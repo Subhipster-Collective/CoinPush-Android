@@ -120,6 +120,9 @@ public class ActivityMain extends AppCompatActivity
         });
         adapterConversion = new AdapterConversion(this, conversions);
         list.setAdapter(adapterConversion);
+        
+        if(conversions.isEmpty())
+            new FragmentAddConversion().show(getFragmentManager(), "FOO");
     }
     
     @Override

@@ -40,4 +40,5 @@
     <string name="text_button_remove">Remove</string>
     <string name="text_button_save">Save</string>
     <string name="text_notify_decrease">When %s has decreased by</string>
+    <string name="text_conversion_add">Add New Conversion</string>
 </resources>

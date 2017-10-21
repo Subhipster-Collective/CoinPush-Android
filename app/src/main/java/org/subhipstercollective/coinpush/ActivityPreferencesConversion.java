@@ -21,6 +21,8 @@ package org.subhipstercollective.coinpush;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -133,10 +135,28 @@ public class ActivityPreferencesConversion extends AppCompatActivity
                 verifyPushSetting(editTextIncreased, checkBoxIncreased);
             }
         });
+        editTextIncreased.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                buttonSave.setEnabled(true);
+            }
+        });
         editTextDecreased.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override public void onFocusChange(View view, boolean hasFocus)
             {
                 verifyPushSetting(editTextDecreased, checkBoxDecreased);
+            }
+        });
+        editTextDecreased.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                buttonSave.setEnabled(true);
             }
         });
     
@@ -144,6 +164,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
             @Override public void onClick(View v)
             {
                 editTextIncreased.setEnabled(checkBoxIncreased.isChecked());
+                buttonSave.setEnabled(true);
             }
         });
     
@@ -151,6 +172,7 @@ public class ActivityPreferencesConversion extends AppCompatActivity
             @Override public void onClick(View v)
             {
                 editTextDecreased.setEnabled(checkBoxDecreased.isChecked());
+                buttonSave.setEnabled(true);
             }
         });
         

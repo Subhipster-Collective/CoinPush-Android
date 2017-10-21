@@ -187,12 +187,14 @@
                         android:layout_weight="1"
                         android:text="@string/text_button_remove"/>
 
-                <Button style="?android:attr/buttonBarButtonStyle"
-                        android:id="@+id/button_conversion_save"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/text_button_save"/>
+                <Button
+                    android:id="@+id/button_conversion_save"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:text="@string/text_button_save"/>
             </LinearLayout>
 
         </LinearLayout>

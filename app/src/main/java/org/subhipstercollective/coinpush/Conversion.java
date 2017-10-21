@@ -94,13 +94,23 @@ class Conversion
     {
         if(change < 0)
         {
-            int red = (int)Math.round(-change * COLOR_SCALE);
-            return Color.rgb(red > 255 ? 255 : red, 0, 0);
+            /*int red = (int)Math.round(-change * COLOR_SCALE);
+            return Color.rgb(red > 255 ? 255 : red, 0, 0);*/
+            int gb = 255 - (int)Math.round(-change * COLOR_SCALE);
+            if(gb < 0)
+                return Color.rgb(255, 0, 0);
+            else
+                return Color.rgb(255, gb, gb);
         }
         else
         {
-            int green = (int)Math.round(change * COLOR_SCALE);
-            return Color.rgb(0, green > 255 ? 255 : green, 0);
+            /*int green = (int)Math.round(change * COLOR_SCALE);
+            return Color.rgb(0, green > 255 ? 255 : green, 0);*/
+            int rb = 255 - (int)Math.round(change * COLOR_SCALE);
+            if(rb < 0)
+                return Color.rgb(0, 255, 0);
+            else
+                return Color.rgb(rb, 255, rb);
         }
     }
 }
