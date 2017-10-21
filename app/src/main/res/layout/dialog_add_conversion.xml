@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         android:text="@string/text_conversion_add"
         android:textAlignment="center"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
     <Spinner
         android:id="@+id/spinner_currency_from"

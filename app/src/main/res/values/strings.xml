@@ -41,4 +41,5 @@
     <string name="text_button_save">Save</string>
     <string name="text_notify_decrease">When %s has decreased by</string>
     <string name="text_conversion_add">Add New Conversion</string>
+    <string name="text_over_24_hours">over a 24 hour period</string>
 </resources>
