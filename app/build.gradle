@@ -21,13 +21,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "org.subhipstercollective.coinpush"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 2
-        versionName "1.1.0"
+        versionCode 4
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         /*jackOptions {
             enabled true

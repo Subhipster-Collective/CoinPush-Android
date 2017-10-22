@@ -31,7 +31,7 @@ class Currency
     {
         ETH("ETH"), BTC("BTC"), LTC("LTC"), DASH("DASH"), XMR("XMR"), NXT("NXT"), ZEC("ZEC"), DGB("DGB"), XRP("XRP"),
         ETC("ETC"), BCH("BCH"), DOGE("DOGE"),
-        USD("USD"), EUR("EUR"), GBP("GBP"), JPY("JPY"), CNY("CNY"), AUD("AUD"), CAD("CAD"), CHF("CHF"), ;
+        USD("USD"), EUR("EUR"), GBP("GBP"), JPY("JPY"), CNY("CNY"), AUD("AUD"), CAD("CAD"), CHF("CHF"), DNT("DNT");
         private final String code;
         Code(String code) { this.code = code; }
         public String toString() { return code; }
@@ -63,6 +63,7 @@ class Currency
         currencies.put(Code.BCH,  new Currency(Code.BCH,  "Bitcoin Cash", bitcoinSymbol, R.mipmap.ic_bch));
         currencies.put(Code.ETC,  new Currency(Code.ETC,  "Ethereum Classic", "", R.mipmap.ic_etc));
         currencies.put(Code.DOGE, new Currency(Code.DOGE, "Dogecoin", "Ð", R.mipmap.ic_doge));
+        currencies.put(Code.DNT,  new Currency(Code.DNT,  "district0x", "DNT", R.mipmap.ic_dnt));
         
         currencies.put(Code.USD,  new Currency(Code.USD,  "US Dollar", "$", "\uD83C\uDDFA\uD83C\uDDF8"));
         currencies.put(Code.EUR,  new Currency(Code.EUR,  "Euro", "€", "\uD83C\uDDEA\uD83C\uDDFA"));
@@ -86,6 +87,7 @@ class Currency
         currencyListFrom.add(currencies.get(Code.NXT));
         currencyListFrom.add(currencies.get(Code.DGB));
         currencyListFrom.add(currencies.get(Code.XRP));
+        currencyListFrom.add(currencies.get(Code.DNT));
         
         currencyListTo = new ArrayList<>();
         currencyListTo.add(currencies.get(Code.USD));
