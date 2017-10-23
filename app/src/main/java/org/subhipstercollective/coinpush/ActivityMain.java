@@ -22,6 +22,9 @@ package org.subhipstercollective.coinpush;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.text.emoji.EmojiCompat;
+import android.support.text.emoji.FontRequestEmojiCompatConfig;
+import android.support.v4.provider.FontRequest;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -99,6 +102,13 @@ public class ActivityMain extends AppCompatActivity
         
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+    
+        final FontRequest fontRequest = new FontRequest(
+                "com.google.android.gms.fonts",
+                "com.google.android.gms",
+                "Noto Color Emoji Compat",
+                R.array.com_google_android_gms_fonts_certs);
+        EmojiCompat.init(new FontRequestEmojiCompatConfig(this, fontRequest));
     
         // Print preferences
         //Map<String, ?> allEntries = preferences.getAll();

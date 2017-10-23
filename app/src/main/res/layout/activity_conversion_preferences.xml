@@ -59,6 +59,7 @@
             android:id="@+id/text_preferences_conversion_change"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAlignment="center"
             android:textSize="20sp"
             tools:text="@string/text_preferences_conversion_change"/>
